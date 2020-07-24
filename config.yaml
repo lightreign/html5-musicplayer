@@ -1,0 +1,30 @@
+# Music Player config file
+
+# Base url for site, usually blank
+base_url:
+
+# Temp location for playing files
+play:
+  dir: public/play/
+  url: play/
+
+# Default library files dir, place your music files in here for plug-n-play operation
+files:
+  dir: files/
+
+# Library directory (not file) data and user data stored here
+db:
+  dir: db/
+  file: music_db.sqlite
+
+# Sets the player theme, at the moment we only have one
+theme: default
+
+# Authentication mode: true = on, false = off, remote_only = only for non-localhost requests
+auth: remote_only
+
+# Enable php debug messages
+testing: false
+
+# Show icons rather than text on buttons
+show_icons: true

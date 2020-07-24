@@ -1,0 +1,55 @@
+{% from 'buttons.html.twig' import button as button %}
+{% extends "wrapper.html.twig" %}
+
+{% block content %}
+   <div class="container-fluid">
+        <h1 class="center">My Music Player</h1>
+            <div class="player-section">
+                <audio id="player" src="" autobuffer ontimeupdate="update_duration(this)">
+                    Sorry, your browser does not support the audio element.
+                </audio>
+
+                <span id="duration">0:00</span>
+                <div id="controls">
+                    <button id="previous" type="button" onclick="prev_song()" class="btn btn-danger">{{ button('previous') }}</button>
+                    <button id="play"     type="button" class="btn btn-info">{{ button('Play') }}</button>
+                    <button id="next" type="button" onclick="next_song()" class="btn btn-success">{{ button('next') }}</button>
+
+                    <div class="btn-group">
+                        <label class="btn btn-primary" onclick="document.getElementById('player').volume-=0.1">{{ button('vol-up') }}</label>
+                        <label class="btn btn-primary" onclick="document.getElementById('player').volume+=0.1">{{ button('vol-down') }}</label>
+                    </div>
+
+                    <div class="pull-right">
+                        <a href="/?page=settings" type="button" class="btn btn-warning">{{ button('settings') }}</a>
+                        {% if auth_enabled %}
+                            <a href="/?page=logout" type="button" class="btn btn-danger">{{ button('logout') }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="playlist">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for file in files %}
+                                <tr>
+                                    <td class="music-file{% if not file.format_supported %} unsupported {% endif %}">
+                                        <span {% if not file.format_supported %}title="File is not playable"{% endif %}>
+                                            {{ file.get_filename }}
+                                        </span>
+                                        <span class="file-path hidden">{{ file.get_file_with_path }}</span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}

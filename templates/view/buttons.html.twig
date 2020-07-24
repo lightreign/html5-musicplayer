@@ -1,0 +1,27 @@
+ {% macro button(text) %}
+    {% if use_icons is defined %}
+        {% if text == 'Play' %}
+            <span class='glyphicon glyphicon-play'>
+        {% elseif text == 'pause' %}
+            <span class='glyphicon glyphicon-pause'>
+        {% elseif text == 'previous' %}
+            <span class='glyphicon glyphicon-step-backward'>
+        {% elseif text == 'next' %}
+            <span class='glyphicon glyphicon-step-forward'>
+        {% elseif text == 'vol-up' %}
+            <span class='glyphicon glyphicon-volume-up'>
+        {% elseif text == 'vol-down' %}
+            <span class='glyphicon glyphicon-volume-down'>
+        {% elseif text == 'settings' %}
+            <span class='glyphicon glyphicon-cog'>
+        {% elseif text == 'back-to-my-music' %}
+            <span class='glyphicon glyphicon-music'>
+        {% elseif text == 'logout' %}
+            <span class='glyphicon glyphicon-log-out'>
+        {% elseif text == 'add-new-directory' %}
+            <span class='glyphicon glyphicon-folder-open'>
+        {% endif %}
+    {% else %}
+        {{ text|replace({'-': ' '})|title }}
+    {% endif %}
+{% endmacro %}

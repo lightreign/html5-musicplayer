@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>{{ title }}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link type="text/css" href="{{ base_url }}/assets/css/bootstrap.css" rel="stylesheet">
+        <link type="text/css" href="{{ base_url }}/assets/css/layout.css" rel="stylesheet">
+        <link type="text/css" href="{{ base_url }}/assets/themes/{{ theme }}/theme.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="fullscreen_bg">
+            <div class="{% if errors is empty %}hidden {% endif %}error_msg msgbox alert alert-danger">
+                <h4>Oops!</h4>
+                <div class="message">
+                    {% for error in errors %}
+                        <div>{{ error }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="{% if success is empty %}hidden {% endif %}success_msg msgbox alert alert-success">
+                <h4>Success!</h4>
+                <div class="message">
+                    {% for message in success %}
+                        <div>{{ message }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div id="content">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            // TODO: better expose config to JS
+            let base_url = '{{ base_url }}';
+            let theme = '{{ theme }}';
+        </script>
+        <script src="{{ base_url }}/assets/js/jquery.min.js"></script>
+        <script src="{{ base_url }}/assets/js/bootstrap.min.js"></script>
+        <script src="{{ base_url }}/assets/js/music.js"></script>
+    </body>
+</html>

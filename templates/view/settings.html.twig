@@ -1,0 +1,61 @@
+{% from 'buttons.html.twig' import button as button %}
+{% extends "wrapper.html.twig" %}
+
+{% block content %}
+	<div class="container-fluid">
+        <h1 class="center">Settings</h1>
+        <div class="library-section">
+            <div class="pull-right">
+                <a href="/" type="button" class="btn btn-success">{{ button('back-to-my-music') }}</a>
+                <a href="logout.php" type="button" class="btn btn-danger">{{ button('logout') }}</a>
+            </div>
+
+            <legend>Library</legend>
+            <div class="form-group col-md-5">
+                <label class="sr-only" for="add_dir">Add Directory</label>
+                <input class="form-control" type="text" id="dirpath" placeholder="Enter Directory Path"/> 
+            </div>
+            <button type="button" id="addlibrary" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {{ button('add-new-directory') }}</button>
+            <table class="table library-table">
+                <thead>
+                    <tr>
+                        <th>Directories</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                	{% for dir in directories %}
+                		<tr id='lib{{ dir.libraryID }}'>
+                            <td>{{ dir.directory }}</td>
+                            <td><a href='#' class='rmlibrary' libraryID='{{ dir.libraryID }}'><span class='glyphicon glyphicon-remove' title='Delete From Library'></span></a></td>
+                        </tr>
+                  	{% endfor %}
+                </tr>
+                </tbody>
+            </table>
+            <legend>Users</legend>
+            <table class="table user-table">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                        {# <th>Actions</th> #}
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                	{% for user in users %}
+                		<tr>
+                            <td>{{ user.username }}</td>
+                            {# <td>
+                                <a href='#' class='rmuser' username='{{ user.username }}'><span class='glyphicon glyphicon-remove' title='Delete User'></span></a>
+                                <a href='#' class='chpasswd' username='{{ user.username }}'><span class='glyphicon glyphicon-pencil' title='Change Password'></span></a>
+                            </td> #}
+                        </tr>
+                     {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

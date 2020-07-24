@@ -1,0 +1,26 @@
+{
+    "name": "lightreign/html5-musicplayer",
+    "description": "Play your local music collection in the browser",
+    "type": "project",
+    "license": "BSD",
+    "authors": [
+        {
+            "name": "Adrian Pennington",
+            "email": "adrian@ajpennington.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MusicPlayer\\": "app/"
+        }
+    },
+    "require": {
+        "php": "^7.1",
+        "twig/twig": "^3.0",
+        "hassankhan/config": "^2.1",
+        "symfony/yaml": "^4.4.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4.4.0"
+    }
+}
