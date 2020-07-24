@@ -10,8 +10,8 @@ if (audioplayer) {
         next_song();
     }    
 }
-// TODO: Update JQuery doc ready to iife
-$(document).ready(function() {
+
+(function() {
     // display background file via javascript so we can resolve paths dynamically
 
     $('.fullscreen_bg').css('background-image', 'url(' + $('#baseurl').text() + '/assets/themes/' + theme + '/background.jpg)');
@@ -84,8 +84,6 @@ $(document).ready(function() {
             data: "rm_directory=" + libraryID,
             dataType: 'json',
             success: function(json) {
-                console.log(json); // TODO: remove
-
                 if (json["status"] == "Error") {
                     handle_error(json["message"]);
 
@@ -103,7 +101,7 @@ $(document).ready(function() {
             }
         });
     });
-});
+})();
 
 
 function prev_song() {
@@ -131,8 +129,6 @@ function play_music(object) {
         data: "play=" + object.find('span.file-path').text(),
         dataType: 'json',
         success: function(json) {
-            console.log(json);
-
             if (json["status"] == "Error") {
                 handle_error(json["message"]);
 
@@ -147,7 +143,7 @@ function play_music(object) {
             handle_error(m);
         }
     });
-}
+};
 
 function update_duration(audio) {
     $("#duration").text(convert_to_time(audio.currentTime) + " / " + convert_to_time(audio.duration));

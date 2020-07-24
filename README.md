@@ -15,21 +15,27 @@ Dependencies
 Installation
 ============
 
-To install run the install.php script in its current directory
+1. In the project root directory run:
 
 ```
-	php install.php
+composer install
 ```
 
-This script will setup the directories & permissions the project needs, and setup the all important database
+2. To setup the directories & permissions the project needs, and setup the all important database:
 
-Once the installer has run you'd need to run this on a web server that uses PHP such as Nginx with php-fpm.
+```
+php install.php
+```
+
+3. Once the installer has run you'd need to run this on a web server that uses PHP such as Nginx with php-fpm.
 You would expose the `public` folder on the webserver to the network with the anything outside of that not exposed.
 
 Or you can use simply use PHP's built-in server. I have included a shell script which can be run by running:
 
 ```
-	./server.sh
+./server.sh
 ```
 
 In the project root. This will spin up a local web server running on port 8000.
+
+4. Enjoy
