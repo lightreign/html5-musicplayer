@@ -16,6 +16,8 @@ use MusicPlayer\Console;
 $database_dir = BASE_DIR . Config::get('db.dir');
 $database_file = $database_dir . Config::get('db.file');
 
+$templates_cache_dir = BASE_DIR . 'templates/cache';
+
 $play_dir = Config::get('play.dir');
 $files_dir = Config::get('files.dir');
 
@@ -49,12 +51,20 @@ if (!file_exists($database_file) || $force_flag = array_search('-f', $argv)) {
 	Console::print('Database already exists.. skipping');
 }
 
+// We dont need this when running local server, but for a standalone server we might
+if (!is_dir($templates_cache_dir)) {
+	mkdir($templates_cache_dir);
+	chmod($templates_cache_dir, 0777);
+} else {
+	Console::print('Template cache folder already exists.. skipping');
+}
+
 // Make sure our play dir exists (and is writable??)
 if (!is_dir($play_dir)) {
 	mkdir($play_dir);
 	chmod($play_dir, 0777);
 } else {
-	Console::print('Play directory already exists..');
+	Console::print('Play directory already exists.. skipping');
 }
 
 // Make sure our files dir exists, this is for direct copying of files to a publicly visible directory
@@ -62,5 +72,5 @@ if (!is_dir($play_dir)) {
 if (!is_dir($files_dir)) {
 	mkdir($files_dir);
 } else{
-	Console::print('Music files directory already exists..');
+	Console::print('Music files directory already exists.. skipping');
 }
