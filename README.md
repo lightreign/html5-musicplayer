@@ -19,12 +19,14 @@ Installation
 
 ```
 composer install
+npm install
+npm run build
 ```
 
 2. To setup the directories & permissions the project needs, and setup the all important database:
 
 ```
-php install.php
+npm run setup
 ```
 
 3. Once the installer has run you'd need to run this on a web server that uses PHP such as Nginx with php-fpm.
@@ -33,7 +35,7 @@ You would expose the `public` folder on the webserver to the network with the an
 Or you can use simply use PHP's built-in server. I have included a shell script which can be run by running:
 
 ```
-./server.sh
+npm run serve
 ```
 
 In the project root. This will spin up a local web server running on port 8000.

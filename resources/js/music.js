@@ -3,7 +3,7 @@
     author:  Adrian Pennington
 */
 
-let audioplayer = document.getElementById('player');
+var audioplayer = document.getElementById('player');
 
 if (audioplayer) {
     audioplayer.onended = function() {
@@ -13,7 +13,6 @@ if (audioplayer) {
 
 (function() {
     // display background file via javascript so we can resolve paths dynamically
-
     $('.fullscreen_bg').css('background-image', 'url(' + $('#baseurl').text() + '/assets/themes/' + theme + '/background.jpg)');
 
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
