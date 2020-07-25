@@ -20,6 +20,7 @@ Installation
 ```
 composer install
 npm install
+npm run build
 ```
 
 2. To setup the directories & permissions the project needs, and setup the all important database:
