@@ -12,6 +12,10 @@ use MusicPlayer\Database;
 class Users {
     use Database;
 
+    protected $table = 'users';
+
+    protected $id_field = 'userID';
+
     public function __construct() {
         $this->connect();
     }

@@ -43,7 +43,6 @@ if (!file_exists($database_file) || $force_flag = array_search('-f', $argv)) {
 		$setup = new \MusicPlayer\Library\Setup();
 		$setup->setup_database();
 	} catch (Exception $e) {
-		Console::print($setup->getMessage());
 		die($e->getMessage());
 	}
 	

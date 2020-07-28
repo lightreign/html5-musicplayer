@@ -55,7 +55,7 @@ class Update extends Controller {
 	public function add_directory() {
 		$dir = $this->request->add_directory;
 
-	    if (is_dir($dir)) {
+	    if ($this->library->is_valid_dir($dir)) {
 	        $this->response->message = $this->library->add_directory($dir);
 	        $this->response->status  = "Success";
 
@@ -69,8 +69,7 @@ class Update extends Controller {
 	 * Remove a directory
 	 */
 	public function remove_directory() {
-		$dir = $this->request->rm_dir;
-	    // TODO: add more security later
+		$dir = $this->request->rm_directory;
 
 	    if ($this->library->remove_directory($dir)) {
 	        $this->response->status   = "Success";

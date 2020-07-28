@@ -53,6 +53,7 @@ if (audioplayer) {
             dataType: 'json',
             success: function(json) {
                 if (json["status"] == "Error") {
+                    $('#dirpath').val('');
                     handle_error(json["message"]);
 
                 } else if (json["status"] == "Success") {
@@ -65,6 +66,7 @@ if (audioplayer) {
                     );
 
                 } else {
+                    $('#dirpath').val('');
                     handle_error("No Response from Music Server");
                 }
             },

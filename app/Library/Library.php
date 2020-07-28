@@ -3,15 +3,18 @@
 namespace MusicPlayer\Library;
 
 use Exception;
-use MusicPlayer\Database;
+use MusicPlayer\Exception\DatabaseException;
+use MusicPlayer\Model;
 
 /**
  * Library
  *
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
-class Library {
-    use Database;
+class Library extends Model {
+    protected $table = 'library';
+
+    protected $id_field = 'libraryID';
 
     /** @var array $directories */
     protected $directories;
@@ -22,7 +25,8 @@ class Library {
      * Constructor
      */ 
     public function __construct($sqlite_file = null) {
-        $this->connect();
+        parent::__construct();
+
         $this->update_directories();
 
         foreach ($this->directories() as $dir) {
@@ -52,35 +56,30 @@ class Library {
     }
 
     /**
-     * Files
+     * Return file list
      * 
-     * @return array
+     * @return File[]
      */
     public function files() {
         return $this->files;
     }
 
     /**
-     * @return array
+     * Return directory list
+     * 
+     * @return string[]
      */
     public function directories() {
         return $this->directories;
     }
 
     /**
+     * Get library directories from database
+     * 
      * @return array
      */
     protected function retrieve_directories() {
-        $query = "SELECT * FROM library";
-
-        $stmt = $this->db->query($query);
-        $result = [];
-
-        while ($row = $stmt->fetchArray(SQLITE3_ASSOC)) {
-            array_push($result, $row);
-        }
-
-        return $result;
+        return $this->select();
     }
 
     protected function update_directories() {
@@ -88,37 +87,47 @@ class Library {
     }
 
     /**
-     * @param string $path
-     * @return int|false Library dir Id or false if failed
+     * Checks if a directory is valid
+     *
+     * @param string $dir Directory path
+     * @return bool
      */
-    public function add_directory($path) {
-        
-        try {
-            $stmt = $this->db->prepare('INSERT INTO library VALUES (null, :path)');
-            $stmt->bindValue(':path', $path);
-            $stmt->execute();
-        } catch (Exception $e) {
+    public function is_valid_dir($dir) {
+        if (!is_dir($dir)) {
             return false;
         }
 
-        return $this->db->lastInsertRowID();
-    }
-
-    /**
-     * @param int $id
-     * @return bool
-     */
-    public function remove_directory($id) {
-
-        try {
-            $stmt = $this->db->prepare('DELETE FROM library WHERE libraryID = :id');
-            $stmt->bindValue(':id', $id);
-            $stmt->execute();
-
-        } catch (Exception $e) {
+        if (stristr($dir, BASE_DIR) && !stristr($dir, BASE_DIR . 'files')) {
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Creates a library directory
+     *
+     * @param string $path
+     * @return int|false Library dir Id or false if failed
+     */
+    public function add_directory($path) {
+        // Add trailing slash if not exists
+        $path = preg_replace('/([^\/])$/', '\\1/', $path);
+
+        try {
+            return $this->insert([ 'directory' => $path ]);
+        } catch (Exception $e) {
+            throw new DatabaseException($this->db, 'Cannot create library directory, maybe it already exists');
+        }
+    }
+
+    /**
+     * Removes a library directory
+     * 
+     * @param int $id
+     * @return bool
+     */
+    public function remove_directory($id) {
+        return $this->delete($id);
     }
 }

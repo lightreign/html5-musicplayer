@@ -2,6 +2,7 @@
 
 namespace MusicPlayer\Controller;
 
+use MusicPlayer\Config;
 use MusicPlayer\EnvironmentCheck;
 use MusicPlayer\Exception\AuthenticationFailed;
 use MusicPlayer\Library\Library;
@@ -79,7 +80,11 @@ class Main extends Controller {
 				Errors::add($e->getMessage());
 
 			} catch (Exception $e) {
-				// TODO: handle something else
+				if (Config::get('testing')) {
+					Errors::add($e->getMessage());
+				} else {
+					Errors::add('An unexpected error occurred, please try again');
+				}
 			}
 		}
 

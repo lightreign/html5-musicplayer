@@ -3,6 +3,8 @@
 namespace MusicPLayer\Exception;
 
 use Exception;
+use MusicPLayer\Config;
+use SQLite3;
 
 /**
  * Database Error
@@ -10,15 +12,24 @@ use Exception;
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
 class DatabaseException extends Exception {
-	public function __construct($message = null) {
+	protected $db;
+
+	public function __construct(SQLite3 $db, $message = null) {
+		$this->db = $db;
 		$this->message = $this->generateMessage($message);
 	}
 
+	/**
+	 * Generate our lovely exception message
+	 * 
+	 * @param string $message
+	 * @return string
+	 */
 	protected function generateMessage($message) {
-		if (SQLite3::lastErrorMsg) {
-			return $message . ': ' . SQLite3::lastErrorMsg;
-		} elseif (!$message && !SQLite3::changes) {
-			return 'DB Operation did not add/modify any rows, was it performed successfully?';
+		if (Config::get('testing') && $this->db->lastErrorMsg()) {
+			$message .= ': ' . $this->db->lastErrorMsg();
+		} elseif (!$message) {
+			$message = 'A database error occurred, please verify the database is setup.';
 		}
 
 		return $message;
