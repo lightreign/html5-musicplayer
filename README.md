@@ -9,6 +9,8 @@ Dependencies
 
 * PHP >= 7.1.3
 * Composer (getcomposer.org)
+* NodeJS v12.x
+* Node Package Manager
 * Bash shell for installer script
 * HTML5 compliant browser (of course everybody has one these days)
 
