@@ -8,5 +8,5 @@ use Exception;
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
 class FilePermissionException extends Exception {
-	//
+    //
 }

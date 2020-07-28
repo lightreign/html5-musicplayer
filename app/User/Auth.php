@@ -12,9 +12,9 @@ use MusicPlayer\Exception\AuthenticationFailed;
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
 final class Auth {
-	use Database;
+    use Database;
 
-	public function __construct() {
+    public function __construct() {
         $this->connect();
     }
 
@@ -22,18 +22,18 @@ final class Auth {
      * Check if a user is authenticated
      */
     public static function is_authenticated() {
-    	$requires_auth = Config::get('auth');
+        $requires_auth = Config::get('auth');
 
-    	if ($requires_auth === false) {
-    		return true;
-    	} elseif ($requires_auth === true && !empty($_SESSION['username'])) {
-    		return true;
-		} elseif ($requires_auth === 'remote_only' && $_SERVER['SERVER_NAME'] === 'localhost') {
-			return true;
-		}
+        if ($requires_auth === false) {
+            return true;
+        } elseif ($requires_auth === true && !empty($_SESSION['username'])) {
+            return true;
+        } elseif ($requires_auth === 'remote_only' && $_SERVER['SERVER_NAME'] === 'localhost') {
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
     /**
      * Check if autentication is required/enabled
@@ -50,7 +50,7 @@ final class Auth {
         return false;
     }
 
-	/**
+    /**
      * @param string $username
      * @param string $password
      * @return true User if authenticated
@@ -62,26 +62,26 @@ final class Auth {
         $stmt->bindValue(':password', User::encrypt_password($password));
         $result = $stmt->execute();
 
-		if ($firstRow = $result->fetchArray(SQLITE3_ASSOC)) {
+        if ($firstRow = $result->fetchArray(SQLITE3_ASSOC)) {
             $user = new User($firstRow);
 
-			return $this->authenticated($user);
-		}
+            return $this->authenticated($user);
+        }
 
-		throw new AuthenticationFailed($username);
+        throw new AuthenticationFailed($username);
     }
 
-	private function authenticated(User $user) {
-		$_SESSION['username'] = $user->username();
+    private function authenticated(User $user) {
+        $_SESSION['username'] = $user->username();
         $_SESSION['accept'] = 1;
 
         return true;
-	}
+    }
 
-	public function unauthenticate() {
-		$_SESSION['username'] = null;
-		$_SESSION['accept'] = 0;
+    public function unauthenticate() {
+        $_SESSION['username'] = null;
+        $_SESSION['accept'] = 0;
 
-		return true;
-	}
+        return true;
+    }
 }

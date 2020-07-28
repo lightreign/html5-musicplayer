@@ -6,12 +6,12 @@
 'use strict';
 
 let gulp = require('gulp'),
-	csso = require('gulp-csso'),
-	rename = require("gulp-rename"),
-	uglify = require('gulp-uglify'),
-	concat = require('gulp-concat'),
-	sourcemaps = require('gulp-sourcemaps'),
-	del = require('del');
+  csso = require('gulp-csso'),
+  rename = require("gulp-rename"),
+  uglify = require('gulp-uglify'),
+  concat = require('gulp-concat'),
+  sourcemaps = require('gulp-sourcemaps'),
+  del = require('del');
 
 // Clean
 gulp.task('clean', () => del(['./public/assets/js','./public/assets/css', './public/assets/fonts', './public/assets/themes']));
@@ -19,8 +19,8 @@ gulp.task('clean', () => del(['./public/assets/js','./public/assets/css', './pub
 // Add CSS
 gulp.task('css', function () {
   return gulp.src(['./node_modules/bootstrap/dist/css/bootstrap.css', './resources/css/layout.css'])
-  	.pipe(sourcemaps.init())
-  	.pipe(concat('bundle.css'))
+    .pipe(sourcemaps.init())
+    .pipe(concat('bundle.css'))
     .pipe(sourcemaps.write())
     .pipe(csso())
     .pipe(rename({ suffix: '.min' }))
@@ -42,12 +42,12 @@ gulp.task('themes', function () {
 // Add scripts
 gulp.task('scripts', function() {
   return gulp.src([
-  	'./node_modules/jquery/dist/jquery.js',
-  	'./node_modules/bootstrap/dist/js/bootstrap.js',
-  	'./resources/js/*.js'
-  	])
-  	.pipe(sourcemaps.init())
-  	.pipe(concat('bundle.js'))
+    './node_modules/jquery/dist/jquery.js',
+    './node_modules/bootstrap/dist/js/bootstrap.js',
+    './resources/js/*.js'
+    ])
+    .pipe(sourcemaps.init())
+    .pipe(concat('bundle.js'))
     .pipe(sourcemaps.write())
     .pipe(uglify())
     .pipe(rename({ suffix: '.min' }))
@@ -59,9 +59,9 @@ gulp.task('default', gulp.series('clean', 'css', 'fonts', 'themes', 'scripts'));
 
 // Watch time
 gulp.task('watch', function() {
-	gulp.watch('./resources/css/*.css', gulp.series('css'));
-	gulp.watch('./resources/themes/*/*', gulp.series('themes'));
-	gulp.watch('./resources/js/*.js', gulp.series('scripts'));
+  gulp.watch('./resources/css/*.css', gulp.series('css'));
+  gulp.watch('./resources/themes/*/*', gulp.series('themes'));
+  gulp.watch('./resources/js/*.js', gulp.series('scripts'));
 });
 
 

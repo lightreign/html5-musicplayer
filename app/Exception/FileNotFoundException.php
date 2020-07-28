@@ -10,10 +10,10 @@ use Exception;
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
 class FileNotFoundException extends Exception {
-	protected $filename;
+    protected $filename;
 
-	public function __construct($filename) {
-		$this->filename = $filename;
-		$this->message = basename($filename) .  ' not found on the filesystem';
-	}
+    public function __construct($filename) {
+        $this->filename = $filename;
+        $this->message = basename($filename) .  ' not found on the filesystem';
+    }
 }

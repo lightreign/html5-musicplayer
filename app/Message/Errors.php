@@ -10,42 +10,42 @@ use MusicPlayer\Singleton;
  * @author Adrian Pennington <adrian@ajpennington.net>
  */
 class Errors extends Singleton {
-	private $errors = [];
+    private $errors = [];
 
-	protected function init() {
-		if (!empty($_SESSION['error_flash'])) {
-			$this->errors = $_SESSION['error_flash'];
+    protected function init() {
+        if (!empty($_SESSION['error_flash'])) {
+            $this->errors = $_SESSION['error_flash'];
 
-			unset($_SESSION['error_flash']);
-		}
-	}
+            unset($_SESSION['error_flash']);
+        }
+    }
 
-	/**
-	 * Add error to list
-	 * 
-	 * @param string $error Error message
-	 */
-	public static function add($error) {
-		self::get_instance()->errors[] = $error;
-	}
+    /**
+     * Add error to list
+     * 
+     * @param string $error Error message
+     */
+    public static function add($error) {
+        self::get_instance()->errors[] = $error;
+    }
 
-	/**
-	 * Add error to list
-	 * 
-	 * @param string $error Error message
-	 */
-	public static function addFlash($error) {
-		if (!isset($_SESSION['error_flash'])) $_SESSION['error_flash'] = [];
+    /**
+     * Add error to list
+     * 
+     * @param string $error Error message
+     */
+    public static function addFlash($error) {
+        if (!isset($_SESSION['error_flash'])) $_SESSION['error_flash'] = [];
 
-		$_SESSION['error_flash'][] = $error;
-	}
+        $_SESSION['error_flash'][] = $error;
+    }
 
-	/**
-	 * Returns list of errors
-	 * 
-	 * @return array
-	 */
-	public static function get() {
-		return self::get_instance()->errors;
-	}
+    /**
+     * Returns list of errors
+     * 
+     * @return array
+     */
+    public static function get() {
+        return self::get_instance()->errors;
+    }
 }

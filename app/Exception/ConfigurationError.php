@@ -10,7 +10,7 @@ use Exception;
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
 class ConfigurationError extends Exception {
-	public function __construct($config_key = null) {
-		$this->message = 'Configuration error: ' . ($config_key ?? '');
-	}
+    public function __construct($config_key = null) {
+        $this->message = 'Configuration error: ' . ($config_key ?? '');
+    }
 }

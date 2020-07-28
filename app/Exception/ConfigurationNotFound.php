@@ -8,7 +8,7 @@ namespace MusicPlayer\Exception;
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
 class ConfigurationNotFound extends ConfigurationError {
-	public function __construct($config_key = null) {
-		$this->message = 'Configuration not found: ' . ($config_key ?? '');
-	}
+    public function __construct($config_key = null) {
+        $this->message = 'Configuration not found: ' . ($config_key ?? '');
+    }
 }

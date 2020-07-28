@@ -5,19 +5,19 @@ namespace MusicPlayer;
 use MusicPlayer\Exception\DatabaseException;
 
 abstract class Model {
-	use Database;
+    use Database;
 
-	protected $table;
+    protected $table;
 
-	protected $id_field;
+    protected $id_field;
 
-	public function __construct($sqlite_file = null) {
+    public function __construct($sqlite_file = null) {
         $this->connect($sqlite_file);
 
-		if (empty($this->table) || empty($this->id_field)) {
+        if (empty($this->table) || empty($this->id_field)) {
             throw new DatabaseException($this->db, 'Missing table or id field model params');
         }
-	}
+    }
 
     /**
      * Get results
@@ -25,7 +25,7 @@ abstract class Model {
      * @param array $fields
      * @return array[]
      */
-	public function select(array $fields = ['*']) {
+    public function select(array $fields = ['*']) {
         $stmt = $this->db->query("SELECT " . join(',', $fields) . " FROM " . $this->table);
         $result = [];
 

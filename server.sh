@@ -15,8 +15,8 @@ port=8000
 # check if PHP exists in your $PATH
 if [ -z "$php" ]
 then
-	echo "PHP was not found in your PATH, is PHP installed?"
-	exit 5
+    echo "PHP was not found in your PATH, is PHP installed?"
+    exit 5
 fi
 
 cd public/
