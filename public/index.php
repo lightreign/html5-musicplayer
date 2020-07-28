@@ -6,6 +6,7 @@
  */
 require_once __DIR__ . '/../bootstrap.php';
 
+use MusicPlayer\Config;
 use MusicPlayer\EnvironmentCheck;
 use MusicPlayer\Message\Errors;
 use MusicPlayer\User\Auth;
@@ -28,7 +29,12 @@ try {
     }
 
 } catch (Exception $e) {
-    Errors::add($e->getMessage());
+    if (Config::get('testing')) {
+        Errors::add($e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+    } else {
+        Errors::add($e->getMessage());
+    }
+
     $controller->check();
 }
 

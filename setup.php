@@ -45,7 +45,8 @@ if (!file_exists($database_file) || $force_flag = array_search('-f', $argv)) {
     } catch (Exception $e) {
         die($e->getMessage());
     }
-    
+
+    Console::print('Database has been setup');
 } else {
     Console::print('Database already exists.. skipping');
 }
@@ -54,14 +55,18 @@ if (!file_exists($database_file) || $force_flag = array_search('-f', $argv)) {
 if (!is_dir($templates_cache_dir)) {
     mkdir($templates_cache_dir);
     chmod($templates_cache_dir, 0777);
+
+    Console::print('Templates cache directory has been setup');
 } else {
-    Console::print('Template cache folder already exists.. skipping');
+    Console::print('Template cache directory already exists.. skipping');
 }
 
 // Make sure our play dir exists (and is writable??)
 if (!is_dir($play_dir)) {
     mkdir($play_dir);
     chmod($play_dir, 0777);
+
+    Console::print('Play directory has been setup');
 } else {
     Console::print('Play directory already exists.. skipping');
 }
@@ -70,6 +75,8 @@ if (!is_dir($play_dir)) {
 // Not ideal but easy to use if your site is only exposed locally
 if (!is_dir($files_dir)) {
     mkdir($files_dir);
+
+    Console::print('Music files directory has been setup');
 } else {
     Console::print('Music files directory already exists.. skipping');
 }

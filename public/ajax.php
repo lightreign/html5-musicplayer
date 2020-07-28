@@ -7,6 +7,8 @@
 
 require_once __DIR__ . '/../bootstrap.php';
 
+use MusicPlayer\Config;
+
 $controller = new \MusicPlayer\Controller\Update;
 
 try {
@@ -30,5 +32,9 @@ try {
     print json_encode($controller->response());
 
 } catch (Exception $e) {
-    print json_encode(array('status' => 'Error', 'message' => $e->getMessage()));
+    if (Config::get('testing')) {
+        print json_encode(['status' => 'Error', 'message' => $e->getMessage() . ' in ' . $e->getFile()  . ':' .  $e->getLine()]);
+    } else {
+        print json_encode(['status' => 'Error', 'message' => $e->getMessage()]);
+    }
 }
