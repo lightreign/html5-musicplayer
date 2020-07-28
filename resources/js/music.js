@@ -12,9 +12,6 @@ if (audioplayer) {
 }
 
 (function() {
-    // display background file via javascript so we can resolve paths dynamically
-    $('.fullscreen_bg').css('background-image', 'url(' + $('#baseurl').text() + '/assets/themes/' + theme + '/background.jpg)');
-
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
 
     if ($('#js-test').hasClass('glyphicon-remove')) {

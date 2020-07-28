@@ -27,4 +27,4 @@ auth: remote_only
 testing: false
 
 # Show icons rather than text on buttons
-show_icons: true
+show_icons: false
