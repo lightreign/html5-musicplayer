@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Installer script
+ * Setup script
  * 
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
