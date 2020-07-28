@@ -29,13 +29,12 @@ class Main extends Controller {
         parent::__construct();
 
         $this->twig = new Twig;
-        $this->library = new Library;
     }
 
     public function index() {
         $variables = [
             'title' => 'Music Player',
-            'files' => $this->library->files()
+            'files' => $this->get_library()->files()
         ];
 
         $this->view('index.html.twig', $variables);
@@ -46,7 +45,7 @@ class Main extends Controller {
 
         $variables = [
             'title' => 'Settings',
-            'directories' => $this->library->directories(),
+            'directories' => $this->get_library()->directories(),
             'users' => $users->getAll()
         ];
 
@@ -106,5 +105,14 @@ class Main extends Controller {
      */
     public function view($template, array $variables = []) {
         $this->set_response($this->twig->view($template, $variables));
+    }
+
+    /**
+     * @return Library
+     */
+    private function get_library() {
+        $this->library = $this->library ?: new Library;
+
+        return $this->library;
     }
 }
