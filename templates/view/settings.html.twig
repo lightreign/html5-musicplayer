@@ -6,8 +6,8 @@
         <h1 class="center">Settings</h1>
         <div class="library-section">
             <div class="pull-right">
-                <a href="/" type="button" class="btn btn-success">{{ button('back-to-my-music') }}</a>
-                <a href="logout.php" type="button" class="btn btn-danger">{{ button('logout') }}</a>
+                <a href="/" type="button" class="btn btn-success">{{ button('back-to-my-music', use_icons) }}</a>
+                <a href="logout.php" type="button" class="btn btn-danger">{{ button('logout', use_icons) }}</a>
             </div>
 
             <legend>Library</legend>
@@ -15,7 +15,7 @@
                 <label class="sr-only" for="dirpath">Add Directory</label>
                 <input class="form-control" type="text" id="dirpath" placeholder="Enter Directory Path"/> 
             </div>
-            <button type="button" id="addlibrary" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {{ button('add-new-directory') }}</button>
+            <button type="button" id="addlibrary" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> {{ button('add-new-directory', use_icons) }}</button>
             <table class="table library-table">
                 <thead>
                     <tr>

@@ -6,6 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link type="text/css" href="{{ base_url }}/assets/css/bundle.min.css" rel="stylesheet">
         <link type="text/css" href="{{ base_url }}/assets/themes/{{ theme }}/theme.css" rel="stylesheet">
+        <style>
+            .fullscreen_bg {
+                background-image: url({{ base_url}}/assets/themes/{{ theme }}/background.jpg);
+            }
+        </style>
     </head>
     <body>
         <div class="fullscreen_bg">
@@ -32,12 +37,6 @@
                 {% endblock %}
             </div>
         </div>
-
-        <script type="text/javascript">
-            // TODO: better expose config to JS
-            let base_url = '{{ base_url }}';
-            let theme = '{{ theme }}';
-        </script>
         <script src="{{ base_url }}/assets/js/bundle.min.js"></script>
     </body>
 </html>

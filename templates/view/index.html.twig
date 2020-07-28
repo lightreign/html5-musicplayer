@@ -11,19 +11,19 @@
 
                 <span id="duration">0:00</span>
                 <div id="controls">
-                    <button id="previous" type="button" onclick="prev_song()" class="btn btn-danger">{{ button('previous') }}</button>
+                    <button id="previous" type="button" onclick="prev_song()" class="btn btn-danger">{{ button('previous', use_icons) }}</button>
                     <button id="play"     type="button" class="btn btn-info">{{ button('Play') }}</button>
-                    <button id="next" type="button" onclick="next_song()" class="btn btn-success">{{ button('next') }}</button>
+                    <button id="next" type="button" onclick="next_song()" class="btn btn-success">{{ button('next', use_icons) }}</button>
 
                     <div class="btn-group">
-                        <label class="btn btn-primary" onclick="document.getElementById('player').volume-=0.1">{{ button('vol-up') }}</label>
-                        <label class="btn btn-primary" onclick="document.getElementById('player').volume+=0.1">{{ button('vol-down') }}</label>
+                        <label class="btn btn-primary" onclick="document.getElementById('player').volume-=0.1">{{ button('vol-up', use_icons) }}</label>
+                        <label class="btn btn-primary" onclick="document.getElementById('player').volume+=0.1">{{ button('vol-down', use_icons) }}</label>
                     </div>
 
                     <div class="pull-right">
-                        <a href="/?page=settings" type="button" class="btn btn-warning">{{ button('settings') }}</a>
+                        <a href="/?page=settings" type="button" class="btn btn-warning">{{ button('settings', use_icons) }}</a>
                         {% if auth_enabled %}
-                            <a href="/?page=logout" type="button" class="btn btn-danger">{{ button('logout') }}</a>
+                            <a href="/?page=logout" type="button" class="btn btn-danger">{{ button('logout', use_icons) }}</a>
                         {% endif %}
                     </div>
                 </div>

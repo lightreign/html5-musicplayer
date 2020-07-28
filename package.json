@@ -6,6 +6,7 @@
   "scripts": {
     "build": "gulp",
     "setup": "php ./setup.php",
+    "cache:clear": "rm -rf ./templates/cache/*",
     "serve": "sh ./server.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

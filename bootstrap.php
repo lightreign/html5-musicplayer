@@ -13,6 +13,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 use MusicPlayer\Config;
 use MusicPlayer\Message\Errors;
 
+set_error_handler(['\MusicPlayer\ErrorHandler', 'handle']);
+
 if (Config::get('testing')) error_reporting(E_ALL);
 
 // Check your environment is sane

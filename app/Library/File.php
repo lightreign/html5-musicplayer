@@ -22,7 +22,7 @@ class File {
 
     public function __construct($filepath) {
         if (!file_exists($filepath)) {
-            throw new FileNotFoundException($filepath); // TODO: gracefully handle this
+            throw new FileNotFoundException($filepath);
         }
 
         $this->filepath = $filepath;
@@ -36,6 +36,8 @@ class File {
 
     /**
      * Grab just the plain source filename
+     *
+     * @return string filename
      */
     public function get_filename() {
         return $this->filename;
@@ -43,6 +45,8 @@ class File {
 
     /**
      * Get the source filename and its whole path
+     * 
+     * @return string file path
      */
     public function get_file_with_path() {
         return $this->filepath;
@@ -50,6 +54,8 @@ class File {
 
     /**
      * Get the temp symlinked file url so the browser can play it
+     * 
+     * @return string relative url
      */
     public function get_playurl() {
         return $this->playurl . $this->filename;
@@ -66,13 +72,15 @@ class File {
 
     /**
      * Create a symlink to play dir so file can be played
+     * Could emit warning which is converted to exception if cannot symlink file
+     *
+     * @return string
      */
     public function symlink_to_playdir() {
         // Clear out old symlinks
         array_map('unlink', glob("{$this->playdir}/*"));
 
         $link = "{$this->playdir}/{$this->filename}";
-        // TODO: try catch to catch any write permission failures
 
         // Create new symlink
         symlink($this->filepath, $link);

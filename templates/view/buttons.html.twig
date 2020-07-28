@@ -1,5 +1,5 @@
- {% macro button(text) %}
-    {% if use_icons is defined %}
+ {% macro button(text, use_icons) %}
+    {% if use_icons %}
         {% if text == 'Play' %}
             <span class='glyphicon glyphicon-play'>
         {% elseif text == 'pause' %}

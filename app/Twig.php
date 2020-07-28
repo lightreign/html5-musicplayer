@@ -40,7 +40,8 @@ class Twig {
 			'theme' => Config::get('theme'),
 			'errors' => Errors::get(),
 			'success' => Success::get(),
-			'auth_enabled' => Auth::is_auth_enabled()
+			'auth_enabled' => Auth::is_auth_enabled(),
+			'use_icons' => Config::get('show_icons'),
 		];
 	}
 }
