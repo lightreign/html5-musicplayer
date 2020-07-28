@@ -7,7 +7,9 @@
         <div class="library-section">
             <div class="pull-right">
                 <a href="/" type="button" class="btn btn-success">{{ button('back-to-my-music', use_icons) }}</a>
-                <a href="logout.php" type="button" class="btn btn-danger">{{ button('logout', use_icons) }}</a>
+                {% if auth_enabled %}
+                    <a href="/?page=logout" type="button" class="btn btn-danger">{{ button('logout', use_icons) }}</a>
+                {% endif %}
             </div>
 
             <legend>Library</legend>
