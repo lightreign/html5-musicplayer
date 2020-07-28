@@ -4,7 +4,7 @@ namespace MusicPlayer\Library;
 
 use MusicPlayer\Config;
 use MusicPlayer\Database;
-use MusicPlayer\Exception\FilePermissionsException;
+use MusicPlayer\Library\Library;
 use MusicPlayer\User\User;
 
 /**
@@ -15,11 +15,16 @@ use MusicPlayer\User\User;
 class Setup {
     use Database;
 
+    /**
+     * Setup constructor
+     */
     public function __construct() {
         $this->connect();
     }
 
     /**
+     * Setup Database
+     * 
      * @return bool Setup completed successfully
      * @throws DatabaseException on error
      */
@@ -41,10 +46,10 @@ class Setup {
      * @return void
      */
     protected function setup_schema() {
-        $this->db->exec('CREATE TABLE library (libraryID INTEGER PRIMARY KEY, directory TEXT)');
+        $this->db->exec('CREATE TABLE library (libraryID INTEGER PRIMARY KEY, directory TEXT UNIQUE)');
         $this->db->exec('CREATE TABLE playlist (playlistID INTEGER PRIMARY KEY, playlist TEXT)');
         $this->db->exec('CREATE TABLE playlistItems (itemID INTEGER PRIMARY KEY, playlistID INT, item TEXT)');
-        $this->db->exec('CREATE TABLE users (userID INTEGER PRIMARY KEY, username TEXT, password TEXT)');
+        $this->db->exec('CREATE TABLE users (userID INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)');
     }
 
     /**
@@ -54,15 +59,10 @@ class Setup {
      */
     protected function setup_files_dir() {
         $files_dir = BASE_DIR . Config::get('files.dir');
+        $library = new Library;
 
         if (is_dir($files_dir)) {
-            $stmt = $this->db->prepare("INSERT INTO library (libraryID, directory) VALUES (null, :path)");
-            $stmt->bindValue(':path', $files_dir);
-            $result = $stmt->execute();
-
-            if ($result === false) {
-                throw new FilePermissionsException;
-            }
+           $library->insert(['directory' => $files_dir]);
         }
     }
 }

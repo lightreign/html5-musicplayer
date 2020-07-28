@@ -2,8 +2,7 @@
 
 namespace MusicPlayer\User;
 
-use Exception;
-use MusicPlayer\Database;
+use MusicPlayer\Model;
 use MusicPlayer\Exception\DatabaseException;
 
 /**
@@ -11,8 +10,10 @@ use MusicPlayer\Exception\DatabaseException;
  * 
  * @author  Adrian Pennington <adrian@ajpennington.net>
  */
-class User {
-    use Database;
+class User extends Model {
+    protected $table = 'users';
+
+    protected $id_field = 'userID';
 
     /**
      * Password Salt
@@ -112,24 +113,10 @@ class User {
      */
     public function save() {
         if ($this->id) {
-            $stmt = $this->db->prepare("UPDATE users SET username = :username, password = :password  where userID = :id");
-            $stmt->bindValue(':id', $this->id);
-            $stmt->bindValue(':username', $this->username);
-            $stmt->bindValue(':password', $this->password);
-
-            if (!$stmt->execute()) {
-                throw new DatabaseException;
-            }
-
+            $this->update($this->id, ['username' => $this->username, 'password' => $this->password]);
 
         } else {
-            $stmt = $this->db->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
-            $stmt->bindValue(':username', $this->username);
-            $stmt->bindValue(':password', $this->password);
-
-            if (!$stmt->execute()) {
-                throw new DatabaseException;
-            }
+            $this->insert(['username' => $this->username, 'password' => $this->password]);
         }
 
         return $this;
@@ -141,16 +128,11 @@ class User {
      * @return User
      * @throws DatabaseException on error
      */
-    public function delete() {
+    public function delete_user() {
         if (!$this->id) {
             return false;
         }
 
-        $stmt = $this->db->prepare("DELETE FROM users where userID = :id");
-        $stmt->bindValue(':id', $this->id);
-        
-        if (!$stmt->execute()) {
-            throw new DatabaseException;
-        }
+        $this->delete($this->id);
     }
 }

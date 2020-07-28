@@ -23,7 +23,7 @@ theme: default
 # Authentication mode: true = on, false = off, remote_only = only for non-localhost requests
 auth: remote_only
 
-# Enable php debug messages
+# Enable debug messages
 testing: false
 
 # Show icons rather than text on buttons
