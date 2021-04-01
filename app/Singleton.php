@@ -5,7 +5,7 @@ namespace MusicPlayer;
 /**
  * Enforce singleton pattern on object and provide instance
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 abstract class Singleton {
     protected static $instances = [];

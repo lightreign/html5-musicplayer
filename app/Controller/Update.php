@@ -10,7 +10,7 @@ use MusicPlayer\Library\Library;
 /**
  * Update controller
  *
- * @author Adrian Pennington <adrian@ajpennington.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Update extends Controller {
 

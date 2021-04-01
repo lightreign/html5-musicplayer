@@ -11,7 +11,7 @@ use Twig\Loader\FilesystemLoader;
 /**
  * Twig wrapper
  *
- * @author Adrian Pennington <adrian@ajpennington.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Twig {
     protected $loader;

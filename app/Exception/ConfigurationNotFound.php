@@ -5,7 +5,7 @@ namespace MusicPlayer\Exception;
 /**
  * Configuration not in correct format or invalid
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class ConfigurationNotFound extends ConfigurationError {
     public function __construct($config_key = null) {

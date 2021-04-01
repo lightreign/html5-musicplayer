@@ -16,7 +16,7 @@ use MusicPlayer\User\Users;
  * Main controller
  * Frameworkess MVC is ok...
  * 
- * @author Adrian Pennington <adrian@ajpennington.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Main extends Controller {
     /** @var Twig $twig */

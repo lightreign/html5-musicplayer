@@ -1,7 +1,7 @@
 <?php
 /**
  * Init file, sets up things nicely
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 
 session_start();

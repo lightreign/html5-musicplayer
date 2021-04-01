@@ -9,7 +9,7 @@ use MusicPlayer\Model;
 /**
  * Library
  *
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Library extends Model {
     protected $table = 'library';

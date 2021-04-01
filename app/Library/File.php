@@ -8,7 +8,7 @@ use MusicPlayer\Exception\FileNotFoundException;
 /**
  * File class
  *
- * @author Adrian Pennington <adrian@ajpennington.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class File {
     protected $filename;

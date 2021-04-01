@@ -8,7 +8,7 @@ use ErrorException;
  * Error Handler class
  * Converts any warnings/errors to exceptions
  * 
- * @author Adrian Pennington <adrian@ajpennington.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  * @link https://www.php.net/manual/en/class.errorexception.php
  */
 class ErrorHandler {

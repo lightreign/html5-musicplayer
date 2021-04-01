@@ -7,7 +7,7 @@ use Exception;
 /**
  * File was not found on disk
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class FileNotFoundException extends Exception {
     protected $filename;

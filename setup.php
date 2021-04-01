@@ -3,7 +3,7 @@
 /**
  * Setup script
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 
 define('BASE_DIR', __DIR__ . '/');
@@ -13,6 +13,18 @@ require_once __DIR__ . '/vendor/autoload.php';
 use MusicPlayer\Config;
 use MusicPlayer\Console;
 
+// Check that we are running in the shell
+if (php_sapi_name() !== 'cli') {
+    die('you can only run this the installer via the command line');
+}
+
+// If no config exists copy the sample file
+if (!file_exists(BASE_DIR . 'config.yaml')) {
+    copy(BASE_DIR . 'config.sample.yaml', BASE_DIR . 'config.yaml');
+
+    Console::print('Setting up default configuration file');
+}
+
 $database_dir = BASE_DIR . Config::get('db.dir');
 $database_file = $database_dir . Config::get('db.file');
 
@@ -20,11 +32,6 @@ $templates_cache_dir = BASE_DIR . 'templates/cache';
 
 $play_dir = Config::get('play.dir');
 $files_dir = Config::get('files.dir');
-
-// Check that we are running in the shell
-if (php_sapi_name() !== 'cli') {
-    die('you can only run this the installer via the command line');
-}
 
 // Make sure our database file exists
 if (!file_exists($database_file) || $force_flag = array_search('-f', $argv)) {
@@ -79,4 +86,12 @@ if (!is_dir($files_dir)) {
     Console::print('Music files directory has been setup');
 } else {
     Console::print('Music files directory already exists.. skipping');
+}
+
+if (!Config::get('salt')) {
+    Config::set('salt', bin2hex(random_bytes(15)));
+
+    Console::print('Added a little salt for password security');
+} else {
+    Console::print('Password salt already applied');
 }

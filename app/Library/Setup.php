@@ -10,7 +10,7 @@ use MusicPlayer\User\User;
 /**
  * Setup Database
  *
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Setup {
     use Database;

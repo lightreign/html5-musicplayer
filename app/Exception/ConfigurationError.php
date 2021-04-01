@@ -7,7 +7,7 @@ use Exception;
 /**
  * Configuration not in correct format or invalid
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class ConfigurationError extends Exception {
     public function __construct($config_key = null) {

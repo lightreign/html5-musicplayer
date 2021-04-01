@@ -9,7 +9,7 @@ use MusicPlayer\Exception\AuthenticationFailed;
 /**
  * User Authentication logic
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 final class Auth {
     use Database;
@@ -26,7 +26,7 @@ final class Auth {
 
         if ($requires_auth === false) {
             return true;
-        } elseif ($requires_auth === true && !empty($_SESSION['username'])) {
+        } elseif ($requires_auth === 'on' && !empty($_SESSION['username']) && $_SESSION['accept']) {
             return true;
         } elseif ($requires_auth === 'remote_only' && $_SERVER['SERVER_NAME'] === 'localhost') {
             return true;
@@ -41,7 +41,7 @@ final class Auth {
     public static function is_auth_enabled() {
         $requires_auth = Config::get('auth');
         
-       if ($requires_auth === true) {
+       if ($requires_auth === 'on') {
             return true;
         } elseif ($requires_auth === 'remote_only' && $_SERVER['SERVER_NAME'] !== 'localhost') {
             return true;
@@ -62,8 +62,8 @@ final class Auth {
         $stmt->bindValue(':password', User::encrypt_password($password));
         $result = $stmt->execute();
 
-        if ($firstRow = $result->fetchArray(SQLITE3_ASSOC)) {
-            $user = new User($firstRow);
+        if ($first_row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $user = new User($first_row);
 
             return $this->authenticated($user);
         }

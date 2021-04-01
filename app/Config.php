@@ -12,7 +12,7 @@ use Noodlehaus\Parser\Yaml;
 /**
  * Wrapper Config class
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Config extends Singleton {
     protected $config;
@@ -35,6 +35,14 @@ class Config extends Singleton {
      */
     public static function get($key) {
         return self::get_instance()->config->get($key);
+    }
+
+    /**
+     * Wraps around ConfigReader, gets value by key
+     */
+    public static function set($key, $value) {
+        self::get_instance()->config->set($key, $value);
+        self::get_instance()->config->toFile(self::$config_file);
     }
 
     /**

@@ -2,7 +2,7 @@
 /**
  * AJAX handler file
  *
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 
 require_once __DIR__ . '/../bootstrap.php';

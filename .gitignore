@@ -6,3 +6,4 @@ public/play/
 public/assets
 vendor/
 node_modules/
+config.yaml

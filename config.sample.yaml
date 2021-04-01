@@ -28,3 +28,6 @@ testing: false
 
 # Show icons rather than text on buttons
 show_icons: false
+
+# password salt
+salt:

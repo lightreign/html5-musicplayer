@@ -2,25 +2,20 @@
 
 namespace MusicPlayer\User;
 
+use MusicPlayer\Config;
 use MusicPlayer\Model;
+use MusicPlayer\Exception\ConfigurationNotFound;
 use MusicPlayer\Exception\DatabaseException;
 
 /**
  * User class
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class User extends Model {
     protected $table = 'users';
 
     protected $id_field = 'userID';
-
-    /**
-     * Password Salt
-     *
-     * @var string
-     */
-    protected static $salt = '0m';
 
     /**
      * User Id
@@ -102,7 +97,13 @@ class User extends Model {
      * @return string encrypted password
      */
     public static function encrypt_password($password) {
-        return crypt($password, self::$salt);
+        $salt = Config::get('salt');
+
+        if (!$salt) {
+            throw new ConfigurationNotFound('salt');
+        }
+
+        return crypt($password, $salt);
     }
 
     /**

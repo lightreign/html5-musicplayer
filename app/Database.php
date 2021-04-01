@@ -8,7 +8,7 @@ use SQLite3;
 /**
  * Database Trait
  *
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 Trait Database {
     /**

@@ -5,7 +5,7 @@ namespace MusicPlayer;
 /**
  * Interfacing with console utils class
  * 
- * @author  Adrian Pennington <adrian@ajpennington.net>
+ * @author  Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Console {
     public static function is_console() {

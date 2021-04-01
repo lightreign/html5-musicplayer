@@ -7,7 +7,7 @@ use MusicPlayer\Config;
 /**
  * Base Controller
  *
- * @author Adrian Pennington <adrian@ajpennington.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 abstract class Controller {
     /**

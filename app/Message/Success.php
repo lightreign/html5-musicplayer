@@ -7,7 +7,7 @@ use MusicPlayer\Singleton;
 /**
  * Manage Success messages
  * 
- * @author Adrian Pennington <adrian@ajpennington.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Success extends Singleton {
     private $messages = [];
