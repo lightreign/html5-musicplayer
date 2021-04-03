@@ -27,6 +27,14 @@ try {
         if (isset($_POST['rm_directory'])) {
             $controller->remove_directory();
         }
+
+        if (isset($_POST['add_user'])) {
+            $controller->add_user();
+        }
+
+        if (isset($_POST['rm_user'])) {
+            $controller->remove_user();
+        }
     }
 
     print json_encode($controller->response());

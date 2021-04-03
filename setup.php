@@ -3,7 +3,7 @@
 /**
  * Setup script
  * 
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 
 define('BASE_DIR', __DIR__ . '/');

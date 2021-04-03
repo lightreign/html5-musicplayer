@@ -6,11 +6,12 @@ use MusicPlayer\Config;
 use MusicPlayer\Model;
 use MusicPlayer\Exception\ConfigurationNotFound;
 use MusicPlayer\Exception\DatabaseException;
+use MusicPlayer\Exception\InvalidPasswordException;
 
 /**
  * User class
- * 
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ *
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class User extends Model {
     protected $table = 'users';
@@ -19,7 +20,7 @@ class User extends Model {
 
     /**
      * User Id
-     * 
+     *
      * @var int
      */
     protected $id;
@@ -33,24 +34,49 @@ class User extends Model {
 
     /**
      * Encrypted password
-     * 
+     *
      * @var string
      */
     protected $password;
 
-    public function __construct(array $user = null) {
+    /**
+     * User constructor
+     *
+     * @param array|int User Id array or id number
+     */
+    public function __construct($user = null) {
+        parent::__construct();
+
+        if (is_numeric($user)) {
+            $user = $this->load($user);
+        }
+
         if (is_array($user)) {
             $this->id = $user['userID'];
             $this->username = $user['username'];
             $this->password = $user['password'];
         }
+    }
 
-        $this->connect();
+    /**
+     * Load user from database
+     */
+    protected function load($id) {
+        $user = $this->select(['*'], ['userID' => $id]);
+
+        return reset($user);
+    }
+
+    /**
+     * Get user Id
+     */
+    public function id() {
+        return $this->id;
     }
 
     /**
      * Get username
-     * 
+     *
      * @return string
      */
     public function username() {
@@ -59,7 +85,7 @@ class User extends Model {
 
     /**
      * Get password
-     * 
+     *
      * @return string
      */
     public function password() {
@@ -68,7 +94,7 @@ class User extends Model {
 
     /**
      * Sets username
-     * 
+     *
      * @param string $username
      * @return User
      */
@@ -85,6 +111,8 @@ class User extends Model {
      * @return User
      */
     public function set_password($password) {
+        $this->check_password($password);
+
         $this->password = self::encrypt_password($password);
 
         return $this;
@@ -107,8 +135,23 @@ class User extends Model {
     }
 
     /**
+     * Checks password is valid
+     *
+     * @param string $password
+     * @return bool true if valid
+     * @throws InvalidPasswordException if password invalid
+     */
+    protected function check_password($password) {
+        if (strlen($password) < 4) {
+            throw new InvalidPasswordException;
+        }
+
+        return true;
+    }
+
+    /**
      * Save the user
-     * 
+     *
      * @return User
      * @throws DatabaseException on error
      */
@@ -117,7 +160,7 @@ class User extends Model {
             $this->update($this->id, ['username' => $this->username, 'password' => $this->password]);
 
         } else {
-            $this->insert(['username' => $this->username, 'password' => $this->password]);
+            $this->id = $this->insert(['username' => $this->username, 'password' => $this->password]);
         }
 
         return $this;
@@ -125,13 +168,19 @@ class User extends Model {
 
     /**
      * Delete the user
-     * 
+     *
      * @return User
      * @throws DatabaseException on error
      */
-    public function delete_user() {
+    public function remove() {
         if (!$this->id) {
             return false;
+        }
+
+        $users = new Users;
+
+        if ($users->count() <= 1) {
+            throw new DeletedUserException($this->username);
         }
 
         $this->delete($this->id);

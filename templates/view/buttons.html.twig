@@ -18,8 +18,10 @@
             <span class='glyphicon glyphicon-music'>
         {% elseif text == 'logout' %}
             <span class='glyphicon glyphicon-log-out'>
-        {% elseif text == 'add-new-directory' %}
+        {% elseif text == 'add-directory' %}
             <span class='glyphicon glyphicon-folder-open'>
+        {% elseif text == 'add-user' %}
+            <span class='glyphicon glyphicon-user'>
         {% endif %}
     {% else %}
         {{ text|replace({'-': ' '})|title }}

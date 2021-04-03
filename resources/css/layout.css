@@ -2,12 +2,11 @@
  * Layout related CSS
  * Independent of any theme
  */
-body {
-    padding-top: 120px;
-    padding-bottom: 40px;
+ body, html {
+    height: 100%;
 }
-/** Standard classes */
 
+/** Standard classes */
 .hide {
     display: none;
 }
@@ -16,24 +15,30 @@ body {
     cursor: pointer;
 }
 
-.msgbox {
-    margin: 10px 300px 0px 300px;
+.fullscreen_bg {
+    padding: 30px;
+    min-height: 100%;
 }
 
+.msgbox {
+    margin: 0 200px 0px 200px;
+}
 
 .login-content {
-    margin-top: 50px;
+    /*margin-top: 50px;*/
+}
+
+.content {
+    margin: 0 auto 100px auto;
+    width: 70%;
 }
 
 /** Sections */
 .player-section {
-    margin: 0px 100px 200px 100px;
     padding: 3px;
 }
 
 .library-section {
-    margin: auto;
-    width: 700px;
     padding: 10px;
 }
 
@@ -53,9 +58,8 @@ body {
     margin-left: 100px;
 }
 
-h1.center {
-    padding-top: 50px;
-    padding-bottom: 70px;
+h1.title {
+    padding-bottom: 50px;
     text-align: center;
 }
 
@@ -63,10 +67,6 @@ div.buttons {
     text-align: center;
     margin: auto;
     width: 200px;
-}
-
-.padding-t20 {
-    padding-top: 20px;
 }
 
 /** Login page */
@@ -103,10 +103,6 @@ div.buttons {
     border-left-style: solid;
 }
 
-.form-signin-heading {
-    text-align: center;
-}
-
 .form-signin {
     max-width: 280px;
     padding: 15px;
@@ -129,3 +125,18 @@ div.buttons {
 .check-window td {
     padding: 10px 5px 10px 10px;
 }
+
+/** Settings page */
+
+.add-section {
+    padding-bottom: 10px;
+}
+
+.add-section .form-group {
+    margin-right: 10px;
+}
+
+.directory-entry {
+    width: 400px !important;
+}
+

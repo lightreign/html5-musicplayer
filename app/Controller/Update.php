@@ -2,10 +2,13 @@
 
 namespace MusicPlayer\Controller;
 
+use Exception;
 use MusicPlayer\Exception\FileNotFoundException;
 use MusicPlayer\Exception\FilePermssionException;
 use MusicPlayer\Library\File;
 use MusicPlayer\Library\Library;
+use MusicPlayer\User\User;
+use MusicPlayer\User\Users;
 
 /**
  * Update controller
@@ -80,6 +83,54 @@ class Update extends Controller {
         }
     }
 
+    /**
+     * Add a user
+     */
+    public function add_user() {
+        $username = $this->request->add_user;
+        $password = $this->request->password;
+
+        try {
+            $user = new User();
+            $user->set_username($username)
+                ->set_password($password)
+                ->save();
+
+            $this->response->userid = $user->id();
+            $this->response->username = $user->username();
+            $this->response->status = "Success";
+            $this->response->message = "User {$user->username()} created";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * Remove a user
+     */
+    public function remove_user() {
+        $user_id = $this->request->rm_user;
+
+        try {
+            $user = new User($user_id);
+            $user->remove();
+
+            $this->response->user_id = $user_id;
+            $this->response->username = $user->username();
+            $this->response->status = "Success";
+            $this->response->message = "User removed";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * Deny access
+     */
     public function access_denied() {
         $this->response->status = "Error";
         $this->response->message = "You are not authorised to perform this action";

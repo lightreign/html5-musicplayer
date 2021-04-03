@@ -34,7 +34,7 @@ if (audioplayer) {
         if ($(this).hasClass("playing")) {
             $(this).text("Pause");
 
-            $('audio#player').attr('src') == '' ? $('.music-file:first').click() : audioplayer.play();
+            $('audio#player').attr('src') == '' ? $('.music-file:not(.unsupported):first').click() : audioplayer.play();
 
         } else {
             $(this).text("Play");
@@ -42,7 +42,12 @@ if (audioplayer) {
         }
     });
 
-    $('#addlibrary').on('click', function() {
+    $('#add-library').on('click', function() {
+        if (!$('#dirpath').val()) {
+            handle_error("No directory path specified");
+            return;
+        }
+
         $.ajax({
             type: "POST",
             url: "ajax.php",
@@ -50,7 +55,6 @@ if (audioplayer) {
             dataType: 'json',
             success: function(json) {
                 if (json["status"] == "Error") {
-                    $('#dirpath').val('');
                     handle_error(json["message"]);
 
                 } else if (json["status"] == "Success") {
@@ -63,12 +67,15 @@ if (audioplayer) {
                     );
 
                 } else {
-                    $('#dirpath').val('');
+                    
                     handle_error("No Response from Music Server");
                 }
             },
             error: function(x,t,m) {
                 handle_error(m);
+            },
+            complete: function() {
+                $('#dirpath').val('');
             }
         });
     });
@@ -99,28 +106,105 @@ if (audioplayer) {
             }
         });
     });
+
+    $('#add-user').on('click', function() {
+        var username = $('#username').val();
+        var password = $('#password').val();
+
+        if (!username || !password) {
+            handle_error("You must specify a username and password to create a user");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "ajax.php",
+            data: "add_user=" + username + '&password=' + password,
+            dataType: 'json',
+            success: function(json) {
+                if (json.status == "Error") {
+                    handle_error(json.message);
+
+                } else if (json.status == "Success") {
+                    handle_success('User added successfully');
+
+                    $(".user-table tbody").append('<tr id="user' + json.userid +'">' +
+                        '<td>' + json.username + '</td><td>***************</td>' +
+                        '<td><a href="#" class="rmuser" user-id="'+ json.userid +'"><span class="glyphicon glyphicon-remove" title="Delete User"></span></a> ' +
+                        // '<a href="#" class="edituser" user-id="'+ json.userid +'"><span class="glyphicon glyphicon-pencil" title="Edit user"></span></a>' +
+                        '</td></tr>'
+                    );
+
+                } else {
+                    handle_error("No Response from Music Server");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            },
+            complete: function() {
+                $('#username').val('');
+                $('#password').val('');
+            }
+        });
+    });
+
+    $('.user-table tbody').on('click', 'a.rmuser', function() {
+        var userID = $(this).attr('userId');
+
+        $.ajax({
+            type: "POST",
+            url: "ajax.php",
+            data: "rm_user=" + userID,
+            dataType: 'json',
+            success: function(json) {
+                if (json["status"] == "Error") {
+                    handle_error(json.message);
+
+                } else if (json.status== "Success") {
+                    handle_success('User ' + json.username + ' removed successfully');
+
+                    $("tr#user" + userID).remove();
+
+                } else {
+                    handle_error("No Response from Music Server");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            }
+        });
+    });
 })();
 
 
 function prev_song() {
     var prevfile = $('td.item-playing').parent().prev().children('td');
 
-    $('.item-playing').removeClass('item-playing');
-    prevfile.addClass('item-playing');
+    if (prevfile.length) {
+        $('.item-playing').removeClass('item-playing');
+        prevfile.addClass('item-playing');
 
-    play_music(prevfile);
+        play_music(prevfile);
+    }
 }
 
 function next_song() {
     var nextfile = $('td.item-playing').parent().next().children('td');
 
-    $('.item-playing').removeClass('item-playing');
-    nextfile.addClass('item-playing');
+    if (nextfile.length) {
+        $('.item-playing').removeClass('item-playing');
+        nextfile.addClass('item-playing');
 
-    play_music(nextfile);
+        play_music(nextfile);
+    }
 }
 
 function play_music(object) {
+    if (object.hasClass('unsupported')) {
+        return;
+    }
+
     $.ajax({
         type: "POST",
         url: "ajax.php",
@@ -148,8 +232,12 @@ function update_duration(audio) {
 }
 
 function convert_to_time(seconds) {
+    if (isNaN(seconds)) {
+        return '00:00';
+    }
+
     seconds = Math.floor(seconds);
-    var minutes = Math.floor( seconds / 60 );
+    var minutes = Math.floor(seconds / 60);
 
     minutes = minutes >= 10 ? minutes : '0' + minutes;
 

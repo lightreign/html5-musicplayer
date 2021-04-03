@@ -5,7 +5,7 @@ namespace MusicPlayer\Exception;
 /**
  * File was not found on disk
  * 
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class ConfigurationFileNotFound extends FileNotFoundException {
     public function __construct($filename) {

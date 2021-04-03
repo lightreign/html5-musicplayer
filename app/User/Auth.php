@@ -9,7 +9,7 @@ use MusicPlayer\Exception\AuthenticationFailed;
 /**
  * User Authentication logic
  * 
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 final class Auth {
     use Database;
