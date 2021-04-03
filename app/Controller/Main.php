@@ -100,6 +100,7 @@ class Main extends Controller {
 
     /**
      * Sets the view
+     *
      * @param string $template Twig template name
      * @param array $variables Variables to bind to template
      */
@@ -108,6 +109,8 @@ class Main extends Controller {
     }
 
     /**
+     * Get library model object
+     *
      * @return Library
      */
     private function get_library() {

@@ -10,7 +10,7 @@ use MusicPlayer\User\User;
 /**
  * Setup Database
  *
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Setup {
     use Database;
@@ -56,6 +56,7 @@ class Setup {
      * Add the default files/ dir to the list
      *
      * @throws FilePermissionsException
+     * @return void
      */
     protected function setup_files_dir() {
         $files_dir = BASE_DIR . Config::get('files.dir');

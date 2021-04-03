@@ -6,8 +6,8 @@ use MusicPlayer\Database;
 
 /**
  * Class for interacting with users in bulk
- * 
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ *
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 class Users {
     use Database;
@@ -22,7 +22,7 @@ class Users {
 
     /**
      * Get all users
-     * 
+     *
      * @return User[]
      */
     public function getAll() {
@@ -37,5 +37,18 @@ class Users {
         }
 
         return $result;
+    }
+
+    /**
+     * Get total user count
+     *
+     * @return int
+     */
+    public function count() {
+        $query = "SELECT COUNT(*) FROM users";
+
+        $stmt = $this->db->query($query);
+
+        return $stmt->fetchArray(SQLITE3_NUM)[0];
     }
 }

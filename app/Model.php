@@ -4,6 +4,12 @@ namespace MusicPlayer;
 
 use MusicPlayer\Exception\DatabaseException;
 
+/**
+ * Database Model
+ * Encapsulate basic database interactions
+ *
+ * @author Adrian Pennington <adrian@penningtonfamily.net>
+ */
 abstract class Model {
     use Database;
 
@@ -25,15 +31,23 @@ abstract class Model {
      * @param array $fields
      * @return array[]
      */
-    public function select(array $fields = ['*']) {
-        $stmt = $this->db->query("SELECT " . join(',', $fields) . " FROM " . $this->table);
-        $result = [];
+    public function select(array $fields = ['*'], array $wheres = []) {
+        $where = $this->queryConditions($wheres);
 
-        while ($row = $stmt->fetchArray(SQLITE3_ASSOC)) {
-            $result[] = $row;
+        $stmt = $this->db->prepare("SELECT " . join(',', $fields) . " FROM " . $this->table . $where);
+
+        foreach ($wheres as $field => $value) {
+            $stmt->bindValue(':' . $field, $value);
         }
 
-        return $result;
+        $result = $stmt->execute();
+        $results = [];
+
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $results[] = $row;
+        }
+
+        return $results;
     }
 
     /**
@@ -109,5 +123,24 @@ abstract class Model {
         }
 
         return $this->db->changes();
+    }
+
+    /**
+     * Process any query condition
+     */
+    protected function queryConditions($wheres) {
+        $where = '';
+
+        if (count($wheres)) {
+            $whereArray = [];
+
+            foreach ($wheres as $field => $value) {
+                $whereArray[] = $field . ' = :' . $field;
+            }
+
+            $where = ' WHERE ' . join(' AND ', $whereArray);
+        }
+
+        return $where;
     }
 }

@@ -31,14 +31,21 @@ class Config extends Singleton {
     }
 
     /**
-     * Wraps around ConfigReader, gets value by key
+     * Wraps around Config object, gets value by key
+     *
+     * @param string key
+     * @return mixed config value
      */
     public static function get($key) {
         return self::get_instance()->config->get($key);
     }
 
     /**
-     * Wraps around ConfigReader, gets value by key
+     * Wraps around Config object, sets value by key
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return void
      */
     public static function set($key, $value) {
         self::get_instance()->config->set($key, $value);
@@ -47,6 +54,8 @@ class Config extends Singleton {
 
     /**
      * Shortcut method cos otherwise its pretty long winded!
+     *
+     * @return string full path to database
      */
     public static function get_database_file() {
         return BASE_DIR . self::get_instance()->config->get('db.dir') . self::get_instance()->config->get('db.file');

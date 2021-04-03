@@ -2,13 +2,13 @@
     Default Theme
 */
 
-.player-section {
-    border: 2px solid #CCC;
-    border-radius: 5px;
-    background-color: #FFF;
+.title {
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.5);
 }
 
-.library-section {
+.content {
     border: 2px solid #CCC;
     border-radius: 5px;
     background-color: #FFF;
@@ -42,11 +42,6 @@
 }
 
 .fullscreen_bg {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
     background-size: cover;
     background-position: 50% 50%; 
     background-repeat: repeat;
@@ -82,8 +77,5 @@
     border-top:1px solid rgba(0,0,0,0.08);
 }
 
-.form-signin-heading {
-    color: #fff;
-    text-align: center;
-    text-shadow: 0 2px 2px rgba(0,0,0,0.5);
-}
+
+
