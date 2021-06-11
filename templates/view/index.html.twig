@@ -12,12 +12,15 @@
             <span id="duration">0:00</span>
             <div id="controls">
                 <button id="previous" type="button" onclick="prev_song()" class="btn btn-danger">{{ button('previous', use_icons) }}</button>
-                <button id="play" type="button" class="btn btn-info">{{ button('Play') }}</button>
+                <button id="play" type="button" class="btn btn-info">
+                    {{ button('play', use_icons) }}
+                    {{ button('pause', use_icons) }}
+                </button>
                 <button id="next" type="button" onclick="next_song()" class="btn btn-success">{{ button('next', use_icons) }}</button>
 
                 <div class="btn-group">
-                    <label class="btn btn-primary" onclick="document.getElementById('player').volume-=0.1">{{ button('vol-up', use_icons) }}</label>
-                    <label class="btn btn-primary" onclick="document.getElementById('player').volume+=0.1">{{ button('vol-down', use_icons) }}</label>
+                    <label class="btn btn-primary vol-down" onclick="volume_down()">{{ button('vol-down', use_icons) }}</label>
+                    <label class="btn btn-primary vol-up" onclick="volume_up()">{{ button('vol-up', use_icons) }}</label>
                 </div>
 
                 <div class="pull-right">

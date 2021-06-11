@@ -18,7 +18,7 @@ class File {
     protected $playurl;
     protected $playfile;
 
-    protected $supported_formats = ['mp3', 'wav', 'ogg'];
+    protected $supported_formats = ['mp3', 'm4a','wav', 'ogg'];
 
     public function __construct($filepath) {
         if (!file_exists($filepath)) {
@@ -67,7 +67,7 @@ class File {
      * @return bool
      */
     public function format_supported() {
-        return in_array($this->extension, $this->supported_formats);
+        return in_array(strtolower($this->extension), $this->supported_formats);
     }
 
     /**

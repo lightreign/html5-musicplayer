@@ -28,6 +28,26 @@ class Config extends Singleton {
         }
 
         $this->config = new ConfigReader(realpath(self::$config_file), new Yaml);
+
+        // Check config file is not empty
+        if (!$this->config->get('db')) {
+            throw new ConfigurationFileNotFound(realpath(self::$config_file));
+        }
+    }
+
+    /**
+     * Check if configuration exists
+     *
+     * @return bool true if exists,false if otherwise
+     */
+    public static function exists() {
+        try {
+            self::get_instance();
+        } catch (ConfigurationFileNotFound $e) {
+            return false;
+        }
+
+        return true;
     }
 
     /**

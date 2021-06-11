@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * AJAX handler file
  *

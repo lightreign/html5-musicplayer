@@ -11,6 +11,24 @@ if (audioplayer) {
     }    
 }
 
+// Media key listeners
+navigator.mediaSession.setActionHandler('previoustrack', function() {
+    prev_song();
+});
+
+navigator.mediaSession.setActionHandler('nexttrack', function() {
+    next_song();
+});
+
+navigator.mediaSession.setActionHandler('play', function() {
+    play();
+});
+
+navigator.mediaSession.setActionHandler('pause', function() {
+    pause();
+});
+
+
 (function() {
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
 
@@ -23,8 +41,8 @@ if (audioplayer) {
         $(this).addClass('item-playing');
 
         $('#play').addClass('playing');
-        $('#play').text("Pause");
-
+        $('#play .label-play').hide();
+        $('#play .label-pause').show();
         play_music($(this));
     });
 
@@ -32,13 +50,9 @@ if (audioplayer) {
         $(this).toggleClass("playing");
 
         if ($(this).hasClass("playing")) {
-            $(this).text("Pause");
-
-            $('audio#player').attr('src') == '' ? $('.music-file:not(.unsupported):first').click() : audioplayer.play();
-
+            play();
         } else {
-            $(this).text("Play");
-            audioplayer.pause();
+           pause();
         }
     });
 
@@ -177,6 +191,27 @@ if (audioplayer) {
     });
 })();
 
+function play() {
+    var playbtn = $('#play');
+
+    $(playbtn).find('.label-play').hide();
+    $(playbtn).find('.label-pause').show();
+
+    $('audio#player').attr('src') == '' ? play_first_song() : audioplayer.play();
+}
+
+function pause() {
+    var playbtn = $('#play');
+
+    playbtn.find('.label-pause').hide();
+    playbtn.find('.label-play').show();
+    audioplayer.pause();
+    navigator.mediaSession.playbackState = "paused";
+}
+
+function play_first_song() {
+    $('.music-file:not(.unsupported):first').click();
+}
 
 function prev_song() {
     var prevfile = $('td.item-playing').parent().prev().children('td');
@@ -197,13 +232,19 @@ function next_song() {
         nextfile.addClass('item-playing');
 
         play_music(nextfile);
+    } else {
+        play_first_song();
     }
 }
 
 function play_music(object) {
     if (object.hasClass('unsupported')) {
+        next_song();
         return;
     }
+
+    $('.error_msg, .success_msg').addClass('hidden');
+    navigator.mediaSession.playbackState = "playing";
 
     $.ajax({
         type: "POST",
@@ -216,6 +257,7 @@ function play_music(object) {
 
             } else if (json["status"] == "Success") {
                 $('audio#player').attr('src', json["file"]).attr('autoplay',true);
+                navigator.mediaSession.playbackState = "playing";
 
             } else {
                 handle_error("No Response from Music Server");
@@ -225,7 +267,28 @@ function play_music(object) {
             handle_error(m);
         }
     });
-};
+}
+
+function volume_up() {
+    var player = document.getElementById('player');
+
+    if ((player.volume + 0.1) > 1.0) {
+        return;
+    }
+
+    player.volume += 0.1;
+}
+
+function volume_down() {
+    var player = document.getElementById('player');
+
+    if (player.volume <= 0.1) {
+        player.volume = 0;
+        return;
+    }
+
+    player.volume -= 0.1;
+}
 
 function update_duration(audio) {
     $("#duration").text(convert_to_time(audio.currentTime) + " / " + convert_to_time(audio.duration));

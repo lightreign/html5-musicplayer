@@ -6,9 +6,9 @@
  * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
 
-define('BASE_DIR', __DIR__ . '/');
+define('BASE_DIR', realpath(__DIR__ . '/..') . '/');
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once BASE_DIR . '/vendor/autoload.php';
 
 use MusicPlayer\Config;
 use MusicPlayer\Console;
@@ -33,8 +33,10 @@ $templates_cache_dir = BASE_DIR . 'templates/cache';
 $play_dir = Config::get('play.dir');
 $files_dir = Config::get('files.dir');
 
+$force_flag = array_search('-f', $argv);
+
 // Make sure our database file exists
-if (!file_exists($database_file) || $force_flag = array_search('-f', $argv)) {
+if (!file_exists($database_file) || $force_flag) {
     if ($force_flag) {
         Console::print('Force refreshing database on request, sir');
     }

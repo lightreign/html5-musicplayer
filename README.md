@@ -8,9 +8,10 @@ Dependencies
 ============
 
 * PHP >= 7.1.3
+* PHP SQlite3 extension
 * Composer (getcomposer.org)
-* NodeJS v12.x
-* Node Package Manager
+* NodeJS v10.x
+* Node Package Manager (npm)
 * Bash shell for installer script
 * HTML5 compliant browser (of course everybody has one these days)
 

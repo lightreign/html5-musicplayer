@@ -1,29 +1,29 @@
  {% macro button(text, use_icons) %}
     {% if use_icons %}
-        {% if text == 'Play' %}
-            <span class='glyphicon glyphicon-play'>
+        {% if text == 'play' %}
+            <span class='glyphicon glyphicon-play label-play'></span>
         {% elseif text == 'pause' %}
-            <span class='glyphicon glyphicon-pause'>
+            <span class='glyphicon glyphicon-pause label-pause'></span>
         {% elseif text == 'previous' %}
-            <span class='glyphicon glyphicon-step-backward'>
+            <span class='glyphicon glyphicon-step-backward'></span>
         {% elseif text == 'next' %}
-            <span class='glyphicon glyphicon-step-forward'>
+            <span class='glyphicon glyphicon-step-forward'></span>
         {% elseif text == 'vol-up' %}
-            <span class='glyphicon glyphicon-volume-up'>
+            <span class='glyphicon glyphicon-volume-up'></span>
         {% elseif text == 'vol-down' %}
-            <span class='glyphicon glyphicon-volume-down'>
+            <span class='glyphicon glyphicon-volume-down'></span>
         {% elseif text == 'settings' %}
-            <span class='glyphicon glyphicon-cog'>
+            <span class='glyphicon glyphicon-cog'></span>
         {% elseif text == 'back-to-my-music' %}
-            <span class='glyphicon glyphicon-music'>
+            <span class='glyphicon glyphicon-music'></span>
         {% elseif text == 'logout' %}
-            <span class='glyphicon glyphicon-log-out'>
+            <span class='glyphicon glyphicon-log-out'></span>
         {% elseif text == 'add-directory' %}
-            <span class='glyphicon glyphicon-folder-open'>
+            <span class='glyphicon glyphicon-folder-open'></span>
         {% elseif text == 'add-user' %}
-            <span class='glyphicon glyphicon-user'>
+            <span class='glyphicon glyphicon-user'></span>
         {% endif %}
     {% else %}
-        {{ text|replace({'-': ' '})|title }}
+        <span class="label-{{ text }}">{{ text|replace({'-': ' '})|title }}</span>
     {% endif %}
 {% endmacro %}

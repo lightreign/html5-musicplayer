@@ -45,6 +45,14 @@
 /** Player section */
 
 #duration {
+    padding: 0 5px;
+}
+
+.controls {
+    padding: 0 5px;
+}
+
+#duration {
     margin-left: 10px;
     border-radius: 5px;
 }
@@ -56,6 +64,10 @@
 
 #player {
     margin-left: 100px;
+}
+
+#play .label-pause {
+    display: none;
 }
 
 h1.title {

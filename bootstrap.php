@@ -15,6 +15,10 @@ use MusicPlayer\Message\Errors;
 
 set_error_handler(['\MusicPlayer\ErrorHandler', 'handle']);
 
+if (!Config::exists()) {
+    die('Configuration file missing, please run: `npm run build` to setup defaults');
+}
+
 if (Config::get('testing')) error_reporting(E_ALL);
 
 // Check your environment is sane
