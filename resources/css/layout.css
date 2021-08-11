@@ -48,8 +48,8 @@
     padding: 0 5px;
 }
 
-.controls {
-    padding: 0 5px;
+#controls {
+    padding: 5px;
 }
 
 #duration {
@@ -150,5 +150,31 @@ div.buttons {
 
 .directory-entry {
     width: 400px !important;
+}
+
+#playback {
+    display: none;
+    width: 260px;
+    margin: 15px;
+}
+
+.v-center {
+    display: flex;
+    align-items: center;
+}
+
+.slider {
+    margin-left: 10px;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+#volume-slider {
+    width: 100px;
+}
+
+i.slider-icon {
+    float: left;
+    margin-right: 5px;
 }
 

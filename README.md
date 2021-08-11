@@ -13,7 +13,7 @@ Dependencies
 * NodeJS v10.x
 * Node Package Manager (npm)
 * Bash shell for installer script
-* HTML5 compliant browser (of course everybody has one these days)
+* HTML5 compliant browser (everybody has one these days)
 
 Installation
 ============

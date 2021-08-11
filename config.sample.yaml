@@ -29,5 +29,8 @@ testing: false
 # Show icons rather than text on buttons
 show_icons: false
 
+# Show volume buttons rather than slider
+volume_buttons: false
+
 # password salt
 salt:

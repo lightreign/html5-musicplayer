@@ -18,7 +18,11 @@ gulp.task('clean', () => del(['./public/assets/js','./public/assets/css', './pub
 
 // Add CSS
 gulp.task('css', function () {
-  return gulp.src(['./node_modules/bootstrap/dist/css/bootstrap.css', './resources/css/layout.css'])
+  return gulp.src([
+      './node_modules/bootstrap/dist/css/bootstrap.css',
+      './node_modules/jquery-ui-dist/jquery-ui.min.css',
+      './resources/css/layout.css'
+    ])
     .pipe(sourcemaps.init())
     .pipe(concat('bundle.css'))
     .pipe(sourcemaps.write())
@@ -39,10 +43,17 @@ gulp.task('themes', function () {
     .pipe(gulp.dest('./public/assets/themes'))
 });
 
+// Add Images
+gulp.task('images', function () {
+  return gulp.src(['./node_modules/jquery-ui-dist/images/*'])
+    .pipe(gulp.dest('./public/assets/css/images'))
+});
+
 // Add scripts
 gulp.task('scripts', function() {
   return gulp.src([
     './node_modules/jquery/dist/jquery.js',
+    './node_modules/jquery-ui-dist/jquery-ui.js',
     './node_modules/bootstrap/dist/js/bootstrap.js',
     './resources/js/*.js'
     ])
@@ -55,7 +66,7 @@ gulp.task('scripts', function() {
 });
 
 // Gulp task to minify all files
-gulp.task('default', gulp.series('clean', 'css', 'fonts', 'themes', 'scripts'));
+gulp.task('default', gulp.series('clean', 'css', 'fonts', 'themes', 'images', 'scripts'));
 
 // Watch time
 gulp.task('watch', function() {

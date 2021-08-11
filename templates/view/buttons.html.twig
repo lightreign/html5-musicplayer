@@ -22,6 +22,8 @@
             <span class='glyphicon glyphicon-folder-open'></span>
         {% elseif text == 'add-user' %}
             <span class='glyphicon glyphicon-user'></span>
+        {% elseif text == 'show-unplayable' %}
+            <span class='glyphicon glyphicon-filter'></span>
         {% endif %}
     {% else %}
         <span class="label-{{ text }}">{{ text|replace({'-': ' '})|title }}</span>

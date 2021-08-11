@@ -189,6 +189,30 @@ navigator.mediaSession.setActionHandler('pause', function() {
             }
         });
     });
+
+    $('#playback').slider({
+        value: 0,
+        orientation: "horizontal",
+        range: "min",
+        animate: true,
+        start: function() {
+            audioplayer._seeking = true;
+        },
+        stop: function( event, ui ) {
+            audioplayer.currentTime = ui.value;
+            audioplayer._seeking = false;
+        },
+    });
+
+    $('#volume-slider').slider({
+        value: audioplayer.volume * 100,
+        orientation: "horizontal",
+        range: "min",
+        animate: true,
+        stop: function( event, ui ) {
+            audioplayer.volume = ui.value / 100;
+        },
+    });
 })();
 
 function play() {
@@ -259,6 +283,9 @@ function play_music(object) {
                 $('audio#player').attr('src', json["file"]).attr('autoplay',true);
                 navigator.mediaSession.playbackState = "playing";
 
+                $('title').text(object.find('> span').text());
+                $('#playback').show();
+
             } else {
                 handle_error("No Response from Music Server");
             }
@@ -292,6 +319,12 @@ function volume_down() {
 
 function update_duration(audio) {
     $("#duration").text(convert_to_time(audio.currentTime) + " / " + convert_to_time(audio.duration));
+
+    if (audio._seeking) {
+        return;
+    }
+
+    update_playback_slider(audio.currentTime, audio.duration);
 }
 
 function convert_to_time(seconds) {
@@ -308,6 +341,21 @@ function convert_to_time(seconds) {
     seconds = seconds >= 10 ? seconds : '0' + seconds;
 
     return minutes + ':' + seconds;
+}
+
+function update_playback_slider(currentTime, duration) {
+    $( "#playback" ).slider({
+        value: currentTime,
+        orientation: "horizontal",
+        range: "min",
+        min: 0,
+        max: duration,
+        animate: true,
+    });
+}
+
+function toggle_unplayable() {
+    $('.playlist .unsupported').toggleClass('hidden');
 }
 
 function handle_error(error_msg) {

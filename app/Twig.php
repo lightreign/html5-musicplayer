@@ -42,6 +42,7 @@ class Twig {
             'success' => Success::get(),
             'auth_enabled' => Auth::is_auth_enabled(),
             'use_icons' => Config::get('show_icons'),
+            'volume_buttons' => Config::get('volume_buttons'),
         ];
     }
 }

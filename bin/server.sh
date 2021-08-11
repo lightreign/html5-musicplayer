@@ -20,4 +20,4 @@ then
 fi
 
 cd public/
-$php -S localhost:$port
+$php -S 0.0.0.0:$port

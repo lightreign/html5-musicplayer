@@ -7,3 +7,6 @@ public/assets
 vendor/
 node_modules/
 config.yaml
+*.sublime-project
+*.sublime-workspace
+

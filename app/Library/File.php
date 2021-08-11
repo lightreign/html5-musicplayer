@@ -25,10 +25,10 @@ class File {
             throw new FileNotFoundException($filepath);
         }
 
-        $this->filepath = $filepath;
-        $this->filename = basename($filepath);
-        $this->path =  dirname($filepath);
-        $this->extension = pathinfo($filepath, PATHINFO_EXTENSION);
+        $this->filepath = strip_tags(urldecode($filepath));
+        $this->filename = basename($this->filepath);
+        $this->path =  dirname($this->filepath);
+        $this->extension = pathinfo($this->filepath, PATHINFO_EXTENSION);
 
         $this->playdir = BASE_DIR . Config::get('play.dir');
         $this->playurl = Config::get('base_url') . Config::get('play.url');
@@ -44,12 +44,12 @@ class File {
     }
 
     /**
-     * Get the source filename and its whole path
+     * Get the source filename and its whole path urlencoded
      * 
      * @return string file path
      */
     public function get_file_with_path() {
-        return $this->filepath;
+        return urlencode($this->filepath);
     }
 
     /**
