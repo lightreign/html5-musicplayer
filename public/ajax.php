@@ -20,6 +20,10 @@ try {
             $controller->play();
         }
 
+        if (isset($_GET['search'])) {
+            $controller->search();
+        }
+
         if (isset($_POST['add_directory'])) {
             $controller->add_directory();
         }

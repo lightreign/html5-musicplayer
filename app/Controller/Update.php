@@ -53,6 +53,14 @@ class Update extends Controller {
     }
 
     /**
+     * Filter music list by search
+     */
+    public function search() {
+        $this->response->status = "Success";
+        $this->response->files = $this->library->search($this->request->search ?? '');
+    }
+
+    /**
      * Add a directory
      */
     public function add_directory() {

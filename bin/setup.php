@@ -43,6 +43,9 @@ if (!file_exists($database_file) || $force_flag) {
 
     if (!is_dir($database_dir)) {
         mkdir($database_dir);
+        chmod($database_dir, 0755);
+
+        Console::print('Creating database directory');
     }
 
     file_put_contents($database_file, '');

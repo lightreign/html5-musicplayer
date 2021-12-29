@@ -64,6 +64,18 @@ class Library extends Model {
         return $this->files;
     }
 
+    public function search($term) {
+        $regex = '/' . preg_quote($term) . '/i';
+
+        if (empty($term)) {
+            return $this->files();
+        }
+
+        return array_values(array_filter($this->files(), function(File $file) use ($regex) {
+            return preg_match($regex, $file->get_filename());
+        }));
+    }
+
     /**
      * Return directory list
      * 

@@ -175,6 +175,16 @@ div.buttons {
 
 i.slider-icon {
     float: left;
-    margin-right: 5px;
+    margin-right: 8px;
+}
+
+.search-container {
+    display: inline-block;
+    margin-left:  20px;
+    width: 40%;
+}
+
+#search {
+    max-width: 80%;
 }
 

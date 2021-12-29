@@ -2,6 +2,7 @@
 
 namespace MusicPlayer\Library;
 
+use JsonSerializable;
 use MusicPlayer\Config;
 use MusicPlayer\Exception\FileNotFoundException;
 
@@ -10,7 +11,7 @@ use MusicPlayer\Exception\FileNotFoundException;
  *
  * @author Adrian Pennington <adrian@penningtonfamily.net>
  */
-class File {
+class File implements JsonSerializable {
     protected $filename;
     protected $extension;
     protected $path;
@@ -68,6 +69,17 @@ class File {
      */
     public function format_supported() {
         return in_array(strtolower($this->extension), $this->supported_formats);
+    }
+
+    /**
+     * Serialised version of object containing important bits
+     */
+    public function jsonSerialize() {
+        return [
+            'filename' => $this->get_filename(),
+            'filepath' => $this->get_file_with_path(),
+            'playback_supported' => $this->format_supported()
+        ];
     }
 
     /**

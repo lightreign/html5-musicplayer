@@ -36,7 +36,7 @@ navigator.mediaSession.setActionHandler('pause', function() {
         $('#install').attr('disabled', true);
     }
 
-    $('.music-file:not(.unsupported').on('click', function() {
+    $('.playlist').on('click', '.music-file:not(.unsupported)', function() {
         $('.item-playing').removeClass('item-playing');
         $(this).addClass('item-playing');
 
@@ -54,6 +54,44 @@ navigator.mediaSession.setActionHandler('pause', function() {
         } else {
            pause();
         }
+    });
+
+    $('#search').on('change', function(e) {
+        $.ajax({
+            type: "GET",
+            url: "ajax.php",
+            data: "search=" + $(this).val(),
+            dataType: 'json',
+            success: function(json) {
+                if (json["status"] == "Error") {
+                    handle_error(json["message"]);
+
+                } else if (json["status"] == "Success") {
+                    var tbody = $('.playlist').find('table>tbody');
+                    tbody.empty();
+
+                    $.each(json["files"], function(index, file) {
+                        tbody.append(
+                            $('<tr>').append(
+                                $('<td>').addClass('music-file').append(
+                                    $('<span>').text(file.filename)
+                                ).append(
+                                    $('<span>')
+                                        .addClass('file-path')
+                                        .addClass('hidden')
+                                        .text(file.filepath)
+                                )
+                            )
+                        );
+                    });
+                } else {
+                    handle_error("No Response from Music Server");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            }
+        });
     });
 
     $('#add-library').on('click', function() {
@@ -204,6 +242,8 @@ navigator.mediaSession.setActionHandler('pause', function() {
         },
     });
 
+    var sliderIcon = $('.slider-icon');
+
     $('#volume-slider').slider({
         value: audioplayer.volume * 100,
         orientation: "horizontal",
@@ -211,6 +251,8 @@ navigator.mediaSession.setActionHandler('pause', function() {
         animate: true,
         stop: function( event, ui ) {
             audioplayer.volume = ui.value / 100;
+
+            update_volume_slider_icon(sliderIcon, audioplayer.volume);
         },
     });
 })();
@@ -352,6 +394,25 @@ function update_playback_slider(currentTime, duration) {
         max: duration,
         animate: true,
     });
+}
+
+function update_volume_slider_icon(icon, volume) {
+    if (volume <= 0) {
+        icon
+            .removeClass('glyphicon-volume-up')
+            .removeClass('glyphicon-volume-down')
+            .addClass('glyphicon-volume-off');
+    } else if (volume <= 0.5) {
+        icon
+            .removeClass('glyphicon-volume-up')
+            .removeClass('glyphicon-volume-off')
+            .addClass('glyphicon-volume-down');
+    } else {
+        icon
+            .removeClass('glyphicon-volume-down')
+            .removeClass('glyphicon-volume-off')
+            .addClass('glyphicon-volume-up');
+    }
 }
 
 function toggle_unplayable() {
