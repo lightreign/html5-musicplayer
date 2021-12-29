@@ -26,14 +26,19 @@
     "jquery": "^3.5.1",
     "jquery-ui-dist": "^1.12.1"
   },
+  "overrides": {
+      "glob-parent": ">=5.1.2"
+  },
   "devDependencies": {
-    "del": "^5.1.0",
-    "eslint": "^7.28.0",
+    "del": "^6.0.0",
+    "eslint": "^8.5.0",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-csso": "^4.0.1",
     "gulp-rename": "^2.0.0",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-uglify": "^3.0.2"
+    "gulp-sourcemaps": "^3.0.0",
+    "gulp-uglify": "^3.0.2",
+    "path-parse": ">=1.0.7",
+    "glob-parent": "~5.1.2"
   }
 }
