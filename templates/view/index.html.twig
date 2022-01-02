@@ -54,16 +54,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for file in files %}
-                            <tr>
-                                <td class="music-file{% if not file.format_supported %} unsupported {% endif %}">
-                                    <span {% if not file.format_supported %}title="File is not playable"{% endif %}>
-                                        {{ file.get_filename }}
-                                    </span>
-                                    <span class="file-path hidden">{{ file.get_file_with_path }}</span>
-                                </td>
-                            </tr>
-                        {% endfor %}
                     </tbody>
                 </table>
             </div>

@@ -30,6 +30,8 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
 
 (function() {
+    search();
+
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
 
     if ($('#js-test').hasClass('glyphicon-remove')) {
@@ -56,43 +58,7 @@ navigator.mediaSession.setActionHandler('pause', function() {
         }
     });
 
-    $('#search').on('change', function(e) {
-        $.ajax({
-            type: "GET",
-            url: "ajax.php",
-            data: "search=" + $(this).val(),
-            dataType: 'json',
-            success: function(json) {
-                if (json["status"] == "Error") {
-                    handle_error(json["message"]);
-
-                } else if (json["status"] == "Success") {
-                    var tbody = $('.playlist').find('table>tbody');
-                    tbody.empty();
-
-                    $.each(json["files"], function(index, file) {
-                        tbody.append(
-                            $('<tr>').append(
-                                $('<td>').addClass('music-file').append(
-                                    $('<span>').text(file.filename)
-                                ).append(
-                                    $('<span>')
-                                        .addClass('file-path')
-                                        .addClass('hidden')
-                                        .text(file.filepath)
-                                )
-                            )
-                        );
-                    });
-                } else {
-                    handle_error("No Response from Music Server");
-                }
-            },
-            error: function(x,t,m) {
-                handle_error(m);
-            }
-        });
-    });
+    $('#search').on('keyup', _.debounce(search, 500));
 
     $('#add-library').on('click', function() {
         if (!$('#dirpath').val()) {
@@ -301,6 +267,51 @@ function next_song() {
     } else {
         play_first_song();
     }
+}
+function search() {
+    $.ajax({
+        type: "GET",
+        url: "ajax.php",
+        data: "search=" + $('#search').val(),
+        dataType: 'json',
+        success: function(json) {
+            if (json["status"] == "Error") {
+                handle_error(json["message"]);
+
+            } else if (json["status"] == "Success") {
+                var tbody = $('.playlist').find('table>tbody');
+                tbody.empty();
+
+                $.each(json["files"], function(index, file) {
+                    var td = $('<td>').addClass('music-file');
+                    var filenameDisplay = $('<span>');
+
+                    if (!file.playback_supported) {
+                        td.addClass('unsupported');
+                        filenameDisplay.attr('title', 'File is not playable');
+                    }
+
+                    tbody.append(
+                        $('<tr>').append(
+                            td.append(
+                                filenameDisplay.text(file.filename)
+                            ).append(
+                                $('<span>')
+                                    .addClass('file-path')
+                                    .addClass('hidden')
+                                    .text(file.filepath)
+                            )
+                        )
+                    );
+                });
+            } else {
+                handle_error("No Response from Music Server");
+            }
+        },
+        error: function(x,t,m) {
+            handle_error(m);
+        }
+    });
 }
 
 function play_music(object) {

@@ -55,6 +55,7 @@ gulp.task('scripts', function() {
     './node_modules/jquery/dist/jquery.js',
     './node_modules/jquery-ui-dist/jquery-ui.js',
     './node_modules/bootstrap/dist/js/bootstrap.js',
+    './node_modules/lodash/lodash.js',
     './resources/js/*.js'
     ])
     .pipe(sourcemaps.init())
