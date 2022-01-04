@@ -30,7 +30,9 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
 
 (function() {
-    search();
+    if ($('#controls').length) {
+        search();
+    }
 
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
 
