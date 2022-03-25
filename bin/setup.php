@@ -1,9 +1,10 @@
+#!/usr/bin/env php
 <?php
 
 /**
  * Setup script
  * 
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 
 define('BASE_DIR', realpath(__DIR__ . '/..') . '/');

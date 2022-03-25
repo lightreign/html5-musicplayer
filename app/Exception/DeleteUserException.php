@@ -7,7 +7,7 @@ use Exception;
 /**
  * Cannot delete user
  * 
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class DeleteUserException extends Exception {
     protected $username;

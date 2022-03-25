@@ -62,6 +62,10 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
     $('#search').on('keyup', _.debounce(search, 500));
 
+    $('#dirpath').on('keyup', function() {
+        disable_enable_button_text_length($('#add-library'), $(this));
+    });
+
     $('#add-library').on('click', function() {
         if (!$('#dirpath').val()) {
             handle_error("No directory path specified");
@@ -127,6 +131,14 @@ navigator.mediaSession.setActionHandler('pause', function() {
         });
     });
 
+    $('#username').on('keyup', function() {
+        $('#add-user').prop('disabled', !($(this).val().length && $('#password').val().length));
+    });
+
+    $('#password').on('keyup', function() {
+        $('#add-user').prop('disabled', !($(this).val().length && $('#username').val().length));
+    });
+
     $('#add-user').on('click', function() {
         var username = $('#username').val();
         var password = $('#password').val();
@@ -185,6 +197,78 @@ navigator.mediaSession.setActionHandler('pause', function() {
                     handle_success('User ' + json.username + ' removed successfully');
 
                     $("tr#user" + userID).remove();
+
+                } else {
+                    handle_error("No Response from Music Server");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            }
+        });
+    });
+
+    $('#playlist-name').on('keyup', function() {
+        disable_enable_button_text_length($('#add-playlist'), $(this));
+    });
+
+    $('#add-playlist').on('click', function() {
+        var name = $('#playlist-name').val();
+        var description = $('#playlist-description').val();
+
+        if (!name) {
+            handle_error("You must specify a playlist name");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "ajax.php",
+            data: "add_playlist=" + name + '&description=' + description,
+            dataType: 'json',
+            success: function(json) {
+                if (json.status == "Error") {
+                    handle_error(json.message);
+
+                } else if (json.status == "Success") {
+                    handle_success('Playlist added successfully');
+
+                    $(".playlist-table tbody").append('<tr id="playist' + json.playlistid +'">' +
+                        '<td>' + json.name + '</td>' +
+                        '<td>' + json.description + '</td>' +
+                        '<td><a href="#" class="rmplaylist" playlist-id="'+ json.playlistid +'"><span class="glyphicon glyphicon-remove" title="Delete Playlist"></span></a> ' +
+                        '</td></tr>'
+                    );
+
+                } else {
+                    handle_error("No Response from Music Server");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            },
+            complete: function() {
+                $('#playlist-name').val('');
+            }
+        });
+    });
+
+    $('.playlist-table tbody').on('click', 'a.rmplaylist', function() {
+        var playlistID = $(this).attr('playlistId');
+
+        $.ajax({
+            type: "POST",
+            url: "ajax.php",
+            data: "rm_playlist=" + playlistID,
+            dataType: 'json',
+            success: function(json) {
+                if (json["status"] == "Error") {
+                    handle_error(json.message);
+
+                } else if (json.status== "Success") {
+                    handle_success('Playlist ' + json.name + ' removed successfully');
+
+                    $("tr#playlist" + playlistID).remove();
 
                 } else {
                     handle_error("No Response from Music Server");
@@ -440,4 +524,8 @@ function handle_error(error_msg) {
 function handle_success(success_msg) {
     $(".success_msg .message").text(success_msg);
     $(".success_msg").removeClass('hidden');
+}
+
+function disable_enable_button_text_length(btn, input) {
+    btn.prop('disabled', !(input.val().length));
 }

@@ -2,7 +2,7 @@
 /**
  * AJAX handler file
  *
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author  Adrian Pennington <git@penningtonfamily.net>
  */
 
 require_once __DIR__ . '/../bootstrap.php';
@@ -38,6 +38,14 @@ try {
 
         if (isset($_POST['rm_user'])) {
             $controller->remove_user();
+        }
+
+        if (isset($_POST['add_playlist'])) {
+            $controller->add_playlist();
+        }
+
+        if (isset($_POST['rm_playlist'])) {
+            $controller->remove_playlist();
         }
     }
 

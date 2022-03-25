@@ -5,7 +5,7 @@ namespace MusicPlayer;
 /**
  * Check the environment
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class EnvironmentCheck {
     /**

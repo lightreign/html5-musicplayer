@@ -9,7 +9,7 @@ use MusicPlayer\Exception\AuthenticationFailed;
 /**
  * User Authentication logic
  * 
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 final class Auth {
     use Database;
@@ -26,7 +26,7 @@ final class Auth {
 
         if ($requires_auth === false) {
             return true;
-        } elseif ($requires_auth === 'on' && !empty($_SESSION['username']) && $_SESSION['accept']) {
+        } elseif ($requires_auth === 'on' && !empty($_SESSION['user']['id']) && $_SESSION['accept']) {
             return true;
         } elseif ($requires_auth === 'remote_only' && $_SERVER['SERVER_NAME'] === 'localhost') {
             return true;
@@ -72,16 +72,24 @@ final class Auth {
     }
 
     private function authenticated(User $user) {
-        $_SESSION['username'] = $user->username();
+        $_SESSION['user'] = [ 'id' => $user->id(), 'username' => $user->username() ];
         $_SESSION['accept'] = 1;
 
         return true;
     }
 
     public function unauthenticate() {
-        $_SESSION['username'] = null;
+        $_SESSION['user'] = null;
         $_SESSION['accept'] = 0;
 
         return true;
+    }
+
+    public static function get_authenticated_user() {
+        if (empty($_SESSION['user'])) {
+            throw AuthenticationFailed('no user set');
+        }
+
+        return $_SESSION['user'];
     }
 }

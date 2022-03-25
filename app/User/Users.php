@@ -7,7 +7,7 @@ use MusicPlayer\Database;
 /**
  * Class for interacting with users in bulk
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class Users {
     use Database;

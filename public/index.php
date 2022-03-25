@@ -2,7 +2,7 @@
 /**
  * Main page
  * 
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author  Adrian Pennington <git@penningtonfamily.net>
  */
 require_once __DIR__ . '/../bootstrap.php';
 

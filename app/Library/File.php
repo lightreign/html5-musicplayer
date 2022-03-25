@@ -9,7 +9,7 @@ use MusicPlayer\Exception\FileNotFoundException;
 /**
  * File class
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class File implements JsonSerializable {
     protected $filename;

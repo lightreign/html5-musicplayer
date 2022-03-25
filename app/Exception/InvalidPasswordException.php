@@ -7,7 +7,7 @@ use Exception;
 /**
  * Password does not meet required strength
  * 
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class InvalidPasswordException extends Exception {
      public function __construct() {
