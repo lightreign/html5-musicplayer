@@ -2,9 +2,10 @@
 
 namespace MusicPlayer\Library;
 
+use JsonSerializable;
 use MusicPlayer\Model;
 
-class Playlist extends Model {
+class Playlist extends Model implements JsonSerializable {
 	protected $table = 'playlist';
 
     protected $id_field = 'playlistID';
@@ -46,13 +47,12 @@ class Playlist extends Model {
 
         if (is_numeric($playlist)) {
             $playlist = $this->load($playlist);
-            error_log(var_export($playlist,true));
         }
 
         if (is_array($playlist)) {
             $this->id = $playlist['playlistID'];
-            $this->name = $playlist['name'];
-            $this->description = $playlist['description'];
+            $this->name = strip_tags($playlist['name']);
+            $this->description = strip_tags($playlist['description']);
             $this->user_id = $playlist['userID'];
         }
     }
@@ -141,6 +141,17 @@ class Playlist extends Model {
         return $this->delete($this->id);
     }
 
+    public function add_item(Playlist\Item $item) {
+        $item->set_playlist_id($this->id);
+
+        return $item->save();
+
+    }
+
+    public function remove_item(Playlist\Item $item) {
+        return $item->delete($item->id);
+    }
+
     /**
      * Save the playlist
      *
@@ -170,6 +181,18 @@ class Playlist extends Model {
     }
 
     /**
+     * Serialised version of object containing important bits
+     */
+    public function jsonSerialize() {
+        return [
+            'id' => $this->id(),
+            'name' => $this->name(),
+            'description' => $this->description(),
+            'userID' => $this->user_id()
+        ];
+    }
+
+    /**
      * @param int $user_id
      * @return Playlist[] user playlists
      */
@@ -183,5 +206,13 @@ class Playlist extends Model {
         }
 
         return $user_playlists;
+    }
+
+    /**
+     * @param int $user_id
+     * @return Playlist[] user playlists
+     */
+    public function items() {
+        return (new Playlist\Item)->playlist_items($this->id);
     }
 }

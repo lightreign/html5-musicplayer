@@ -8,6 +8,7 @@ use MusicPlayer\Exception\FilePermssionException;
 use MusicPlayer\Library\File;
 use MusicPlayer\Library\Library;
 use MusicPlayer\Library\Playlist;
+use MusicPlayer\Library\Playlist\Item;
 use MusicPlayer\User\Auth;
 use MusicPlayer\User\User;
 use MusicPlayer\User\Users;
@@ -28,7 +29,7 @@ class Update extends Controller {
         // Set default response
         $this->response = (object) [
             "message" =>  null,
-            "status" =>  "Error",
+            "status" =>  "Route not found",
         ];
 
         $this->library = new Library();
@@ -156,6 +157,69 @@ class Update extends Controller {
             $this->response->message = $e->getMessage();
         }
 
+    }
+
+    /**
+     * List playlists
+     */
+    public function playlists() {
+        try {
+            $current_user = Auth::get_authenticated_user();
+            $user = new User($current_user['id']);
+
+            $this->response->playlists = $user->playlists();
+            $this->response->status = "Success";
+            $this->response->message = "";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * get playlist items
+     */
+    public function playlist() {
+        try {
+            $current_user = Auth::get_authenticated_user();
+            $user = new User($current_user['id']);
+            $playlist = new Playlist($this->request->playlist);
+
+            // TODO: check permissions $user->playlists();
+            $this->response->files = $playlist->items(); // AS files
+            $this->response->status = "Success";
+            $this->response->message = "";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * Add to a playlist
+     */
+    public function add_to_playlist() {
+        $playlist_id = $this->request->add_to_playlist;
+        $filepath = $this->request->filepath;
+
+        try {
+            $playlist_item = new Item();
+            $playlist_item->set_playlist_id($playlist_id)
+                ->set_filepath($filepath)
+                ->save();
+
+            $this->response->itemid = $playlist_item->id();
+            $this->response->playlistid = $playlist_item->playlist_id();
+            $this->response->filepath = $playlist_item->filepath();
+            $this->response->status = "Success";
+            $this->response->message = "Item added to playlist";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
     }
 
     /**

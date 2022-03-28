@@ -4,6 +4,7 @@
 */
 
 var audioplayer = document.getElementById('player');
+var playlists;
 
 if (audioplayer) {
     audioplayer.onended = function() {
@@ -31,7 +32,7 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
 (function() {
     if ($('#controls').length) {
-        search();
+        playlists().then(function() { search() });
     }
 
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
@@ -249,6 +250,7 @@ navigator.mediaSession.setActionHandler('pause', function() {
             },
             complete: function() {
                 $('#playlist-name').val('');
+                $('#playlist-description').val('');
             }
         });
     });
@@ -306,6 +308,12 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
             update_volume_slider_icon(sliderIcon, audioplayer.volume);
         },
+    });
+
+    $('#playlists').on('change', function() {
+        $(this).find('option:selected').each(function() {
+            open_playlist($(this).val());
+        });
     });
 })();
 
@@ -392,6 +400,110 @@ function search() {
                 });
             } else {
                 handle_error("No Response from Music Server");
+            }
+        },
+        error: function(x,t,m) {
+            handle_error(m);
+        },
+        complete: function() {
+            create_playlist_contextmenu();
+        }
+    });
+}
+
+function playlists() {
+    return $.ajax({
+        type: "GET",
+        url: "ajax.php",
+        data: "playlists=1",
+        dataType: 'json',
+        success: function(response) {
+            playlists = response.playlists;
+        },
+        error: function(x,t,m) {
+            handle_error(m);
+        }
+    });
+}
+
+function create_playlist_contextmenu() {
+    // TODO: prevent unsupported
+    var items = {};
+
+    playlists.forEach(function(playlist) {
+        items[playlist.id] = {
+            name: 'Add to ' + playlist.name, callback: function(key, opt) { add_to_playlist(key, opt.$trigger); } 
+        };
+    });
+
+    $.contextMenu({
+        // define which elements trigger this menu
+        selector: ".music-file",
+        // define the elements of the menu
+        items: items
+    });
+}
+
+function open_playlist(id) {
+    if (id === '') {
+        search();
+        return;
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "ajax.php",
+        data: "playlist=" + id,
+        dataType: 'json',
+        success: function(response) {
+            if (response.status == "Error") {
+                handle_error(response.message);
+
+            } else if (response.status == "Success") {
+                var tbody = $('.playlist').find('table>tbody');
+                tbody.empty();
+
+                $.each(response.files, function(index, file) {
+                    var td = $('<td>').addClass('music-file');
+                    var filenameDisplay = $('<span>');
+
+                    tbody.append(
+                        $('<tr>').append(
+                            td.append(
+                                filenameDisplay.text(file.filename)
+                            ).append(
+                                $('<span>')
+                                    .addClass('file-path')
+                                    .addClass('hidden')
+                                    .text(file.filepath)
+                            )
+                        )
+                    );
+                });
+            } else {
+                handle_error("No Response from Music Server");
+            }
+        },
+        error: function(x,t,m) {
+            handle_error(m);
+        }
+    });
+}
+
+function add_to_playlist(id, element) {
+    var filepath = $(element).find('span.file-path').text();
+
+    return $.ajax({
+        type: "POST",
+        url: "ajax.php",
+        data: "add_to_playlist=" + id + '&filepath=' + filepath,
+        dataType: 'json',
+        success: function(response) {
+            if (response.status == "Error") {
+                handle_error('Unable to add song to playlist, might already exist');
+
+            } else {
+                handle_success('Song added to playlist');
             }
         },
         error: function(x,t,m) {
@@ -529,3 +641,4 @@ function handle_success(success_msg) {
 function disable_enable_button_text_length(btn, input) {
     btn.prop('disabled', !(input.val().length));
 }
+

@@ -40,6 +40,18 @@ try {
             $controller->remove_user();
         }
 
+        if (isset($_GET['playlists'])) {
+            $controller->playlists();
+        }
+
+        if (isset($_GET['playlist'])) {
+            $controller->playlist();
+        }
+
+        if (isset($_POST['add_to_playlist'])) {
+            $controller->add_to_playlist();
+        }
+
         if (isset($_POST['add_playlist'])) {
             $controller->add_playlist();
         }

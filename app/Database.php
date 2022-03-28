@@ -22,5 +22,7 @@ Trait Database {
     public function connect($sqlite_file = null) {
         $this->db = new SQLite3($sqlite_file ?? Config::get_database_file());
         $this->db->enableExceptions(true);
+
+        $this->db->exec('PRAGMA foreign_keys = ON');
     }
 }

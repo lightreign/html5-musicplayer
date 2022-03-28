@@ -33,9 +33,12 @@ class Main extends Controller {
     }
 
     public function index() {
+        $user = new User(Auth::get_authenticated_user()['id']);
+
         $variables = [
             'title' => 'Music Player',
-            'files' => $this->get_library()->files()
+            'files' => $this->get_library()->files(),
+            'playlists' => $user->playlists()
         ];
 
         $this->view('index.html.twig', $variables);
