@@ -67,7 +67,9 @@ navigator.mediaSession.setActionHandler('pause', function() {
         disable_enable_button_text_length($('#add-library'), $(this));
     });
 
-    $('#add-library').on('click', function() {
+    $('#library-form').on('submit', function(e) {
+        e.preventDefault();
+
         if (!$('#dirpath').val()) {
             handle_error("No directory path specified");
             return;
@@ -79,20 +81,19 @@ navigator.mediaSession.setActionHandler('pause', function() {
             data: "add_directory=" + $('#dirpath').val(),
             dataType: 'json',
             success: function(json) {
-                if (json["status"] == "Error") {
-                    handle_error(json["message"]);
+                if (json.status == "Error") {
+                    handle_error(json.message);
 
-                } else if (json["status"] == "Success") {
+                } else if (json.status == "Success") {
                     handle_success('Directory added successfully');
 
-                    $('.library-table').append("<tr id='lib" + json['message'] +"'>" + 
+                    $('.library-table').append("<tr id='lib" + json.message +"'>" + 
                         "<td>" + $('#dirpath').val() + "</td>" +
-                        "<td><a href='#' class='rmlibrary' libraryID='" + json['message'] +
+                        "<td><a href='#' class='rmlibrary' libraryID='" + json.message +
                         "'><span class='glyphicon glyphicon-remove' title='Delete From Library'></span></a></td>"
                     );
 
                 } else {
-                    
                     handle_error("No Response from Music Server");
                 }
             },
@@ -140,7 +141,9 @@ navigator.mediaSession.setActionHandler('pause', function() {
         $('#add-user').prop('disabled', !($(this).val().length && $('#username').val().length));
     });
 
-    $('#add-user').on('click', function() {
+    $('#user-form').on('submit', function(e) {
+        e.preventDefault();
+
         var username = $('#username').val();
         var password = $('#password').val();
 
@@ -213,7 +216,9 @@ navigator.mediaSession.setActionHandler('pause', function() {
         disable_enable_button_text_length($('#add-playlist'), $(this));
     });
 
-    $('#add-playlist').on('click', function() {
+    $('#playlist-form').on('submit', function(e) {
+        e.preventDefault();
+
         var name = $('#playlist-name').val();
         var description = $('#playlist-description').val();
 
@@ -232,17 +237,19 @@ navigator.mediaSession.setActionHandler('pause', function() {
                     handle_error(json.message);
 
                 } else if (json.status == "Success") {
-                    handle_success('Playlist added successfully');
+                    handle_modal_success('Playlist created');
 
-                    $(".playlist-table tbody").append('<tr id="playist' + json.playlistid +'">' +
+                    $(".playlist-table tbody").append('<tr id="playlist' + json.id +'">' +
                         '<td>' + json.name + '</td>' +
                         '<td>' + json.description + '</td>' +
-                        '<td><a href="#" class="rmplaylist" playlist-id="'+ json.playlistid +'"><span class="glyphicon glyphicon-remove" title="Delete Playlist"></span></a> ' +
+                        '<td><a href="#" class="rmplaylist" playlistId="'+ json.id +'"><span class="glyphicon glyphicon-remove" title="Delete Playlist"></span></a> ' +
                         '</td></tr>'
                     );
 
+                    playlists.push(json);
+
                 } else {
-                    handle_error("No Response from Music Server");
+                    handle_modal_error("No Response from Music Server");
                 }
             },
             error: function(x,t,m) {
@@ -268,12 +275,14 @@ navigator.mediaSession.setActionHandler('pause', function() {
                     handle_error(json.message);
 
                 } else if (json.status== "Success") {
-                    handle_success('Playlist ' + json.name + ' removed successfully');
+                    handle_modal_success('Playlist ' + json.name + ' removed');
 
                     $("tr#playlist" + playlistID).remove();
 
+                    _.remove(playlists, (playlist) => playlist.id === Number(playlistID));
+
                 } else {
-                    handle_error("No Response from Music Server");
+                    handle_modal_error("No Response from Music Server");
                 }
             },
             error: function(x,t,m) {
@@ -314,6 +323,10 @@ navigator.mediaSession.setActionHandler('pause', function() {
         $(this).find('option:selected').each(function() {
             open_playlist($(this).val());
         });
+    });
+
+    $('#playlist-modal').on('show.bs.modal', function (event) {
+        $(this).find('.alert').addClass('hidden');
     });
 })();
 
@@ -378,7 +391,7 @@ function search() {
 
                 $.each(json["files"], function(index, file) {
                     var td = $('<td>').addClass('music-file');
-                    var filenameDisplay = $('<span>');
+                    var filenameDisplay = $('<span>').addClass('filename');
 
                     if (!file.playback_supported) {
                         td.addClass('unsupported');
@@ -427,20 +440,27 @@ function playlists() {
 }
 
 function create_playlist_contextmenu() {
-    // TODO: prevent unsupported
-    var items = {};
-
-    playlists.forEach(function(playlist) {
-        items[playlist.id] = {
-            name: 'Add to ' + playlist.name, callback: function(key, opt) { add_to_playlist(key, opt.$trigger); } 
-        };
-    });
-
     $.contextMenu({
-        // define which elements trigger this menu
-        selector: ".music-file",
-        // define the elements of the menu
-        items: items
+        selector: '.music-file:not(.unsupported)',
+        build: function($trigger, e) {
+            var items = {};
+
+            playlists.forEach(function(playlist) {
+                items[playlist.id] = {
+                    name: 'Add to ' + playlist.name, callback: (key, opt) => add_to_playlist(key, opt.$trigger)
+                };
+            });
+
+            if (_.isEmpty(items)) {
+                items.new = {
+                    name: 'Create new playlist', callback: () => $('#playlist-modal').modal('show')
+                };
+            }
+
+            return {
+                items: items
+            };
+        }
     });
 }
 
@@ -501,7 +521,6 @@ function add_to_playlist(id, element) {
         success: function(response) {
             if (response.status == "Error") {
                 handle_error('Unable to add song to playlist, might already exist');
-
             } else {
                 handle_success('Song added to playlist');
             }
@@ -534,7 +553,7 @@ function play_music(object) {
                 $('audio#player').attr('src', json["file"]).attr('autoplay',true);
                 navigator.mediaSession.playbackState = "playing";
 
-                $('title').text(object.find('> span').text());
+                $('title').text(object.find('> span.filename').text());
                 $('#playback').show();
 
             } else {
@@ -629,13 +648,23 @@ function toggle_unplayable() {
 }
 
 function handle_error(error_msg) {
-    $(".error_msg .message").text(error_msg);
-    $(".error_msg").removeClass('hidden');
+    $("#alert-box .error_msg .message").text(error_msg);
+    $("#alert-box .error_msg").removeClass('hidden');
 }
 
 function handle_success(success_msg) {
-    $(".success_msg .message").text(success_msg);
-    $(".success_msg").removeClass('hidden');
+    $("#alert-box .success_msg .message").text(success_msg);
+    $("#alert-box .success_msg").removeClass('hidden');
+}
+
+function handle_modal_error(error_msg) {
+    $(".modal .error_msg .message").text(error_msg);
+    $(".modal .error_msg").removeClass('hidden');
+}
+
+function handle_modal_success(success_msg) {
+    $(".modal .success_msg .message").text(success_msg);
+    $(".modal .success_msg").removeClass('hidden');
 }
 
 function disable_enable_button_text_length(btn, input) {

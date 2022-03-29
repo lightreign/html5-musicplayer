@@ -4,7 +4,7 @@ namespace MusicPlayer\Controller;
 
 use Exception;
 use MusicPlayer\Exception\FileNotFoundException;
-use MusicPlayer\Exception\FilePermssionException;
+use MusicPlayer\Exception\FilePermissionException;
 use MusicPlayer\Library\File;
 use MusicPlayer\Library\Library;
 use MusicPlayer\Library\Playlist;
@@ -186,8 +186,7 @@ class Update extends Controller {
             $user = new User($current_user['id']);
             $playlist = new Playlist($this->request->playlist);
 
-            // TODO: check permissions $user->playlists();
-            $this->response->files = $playlist->items(); // AS files
+            $this->response->files = $playlist->items();
             $this->response->status = "Success";
             $this->response->message = "";
 
@@ -236,7 +235,7 @@ class Update extends Controller {
                 ->set_user_id(Auth::get_authenticated_user()['id'])
                 ->save();
 
-            $this->response->playlistid = $playlist->id();
+            $this->response->id = $playlist->id();
             $this->response->name = $playlist->name();
             $this->response->description = $playlist->description();
             $this->response->user_id = $playlist->user_id();

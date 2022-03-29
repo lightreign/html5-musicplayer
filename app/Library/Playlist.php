@@ -3,10 +3,12 @@
 namespace MusicPlayer\Library;
 
 use JsonSerializable;
+use MusicPlayer\Exception\FilePermissionException;
 use MusicPlayer\Model;
+use MusicPlayer\User\Auth;
 
 class Playlist extends Model implements JsonSerializable {
-	protected $table = 'playlist';
+    protected $table = 'playlist';
 
     protected $id_field = 'playlistID';
 
@@ -24,7 +26,7 @@ class Playlist extends Model implements JsonSerializable {
      */
     protected $name;
 
- 	/**
+    /**
      * Playlist description
      *
      * @var string
@@ -54,6 +56,8 @@ class Playlist extends Model implements JsonSerializable {
             $this->name = strip_tags($playlist['name']);
             $this->description = strip_tags($playlist['description']);
             $this->user_id = $playlist['userID'];
+
+            $this->user_can_access(Auth::get_authenticated_user());
         }
     }
 
@@ -125,6 +129,17 @@ class Playlist extends Model implements JsonSerializable {
         $this->user_id = $user_id;
 
         return $this;
+    }
+
+    /**
+     * @param array $user_to_check
+     * @return void
+     * @throws FilePermissionException if user cannot access
+     */
+    public function user_can_access($user_to_check) {
+        if ($this->user_id !== $user_to_check['id']) {
+            throw new FilePermissionException('Playlist cannot be accessed by this user');
+        }
     }
 
     /**

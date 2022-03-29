@@ -1,5 +1,7 @@
 <?php
 
+namespace MusicPlayer\Exception;
+
 use Exception;
 
 /**
