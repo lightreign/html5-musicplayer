@@ -9,7 +9,7 @@ use MusicPlayer\Model;
 /**
  * Library
  *
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author  Adrian Pennington <git@penningtonfamily.net>
  */
 class Library extends Model {
     protected $table = 'library';
@@ -44,6 +44,8 @@ class Library extends Model {
         $files = [];
 
         foreach (glob("$dir/*") as $filepath) {
+            $filepath = str_replace('//', '/', $filepath);
+
             if (is_dir($filepath) && $filepath !== $dir) {
                 $files = array_merge($files, $this->get_files($filepath));
 

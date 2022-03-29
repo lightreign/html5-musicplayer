@@ -7,7 +7,7 @@ use MusicPlayer\Singleton;
 /**
  * Manage Error messages
  * 
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class Errors extends Singleton {
     private $errors = [];

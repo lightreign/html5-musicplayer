@@ -14,21 +14,23 @@
     </head>
     <body>
         <div class="fullscreen_bg">
-            <div class="{% if errors is empty %}hidden {% endif %}error_msg msgbox alert alert-danger">
-                <h4>Oops!</h4>
-                <div class="message">
-                    {% for error in errors %}
-                        <div>{{ error }}</div>
-                    {% endfor %}
+            <div id="alert-box">
+                <div class="{% if errors is empty %}hidden {% endif %}error_msg msgbox alert alert-danger">
+                    <h4>Oops!</h4>
+                    <div class="message">
+                        {% for error in errors %}
+                            <div>{{ error }}</div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
 
-            <div class="{% if success is empty %}hidden {% endif %}success_msg msgbox alert alert-success">
-                <h4>Success!</h4>
-                <div class="message">
-                    {% for message in success %}
-                        <div>{{ message }}</div>
-                    {% endfor %}
+                <div class="{% if success is empty %}hidden {% endif %}success_msg msgbox alert alert-success">
+                    <h4>Success!</h4>
+                    <div class="message">
+                        {% for message in success %}
+                            <div>{{ message }}</div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
 

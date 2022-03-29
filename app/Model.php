@@ -8,7 +8,7 @@ use MusicPlayer\Exception\DatabaseException;
  * Database Model
  * Encapsulate basic database interactions
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 abstract class Model {
     use Database;
@@ -23,6 +23,15 @@ abstract class Model {
         if (empty($this->table) || empty($this->id_field)) {
             throw new DatabaseException($this->db, 'Missing table or id field model params');
         }
+    }
+
+    /**
+     * Load model from database
+     */
+    protected function load($id) {
+        $model = $this->select(['*'], [$this->id_field => $id]);
+
+        return reset($model);
     }
 
     /**

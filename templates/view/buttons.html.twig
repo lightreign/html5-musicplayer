@@ -24,6 +24,8 @@
             <span class='glyphicon glyphicon-user'></span>
         {% elseif text == 'show-unplayable' %}
             <span class='glyphicon glyphicon-filter'></span>
+        {% elseif text == 'playlist' %}
+            <span class='glyphicon glyphicon-list-alt'></span>
         {% endif %}
     {% else %}
         <span class="label-{{ text }}">{{ text|replace({'-': ' '})|title }}</span>

@@ -4,6 +4,7 @@ namespace MusicPlayer\User;
 
 use MusicPlayer\Config;
 use MusicPlayer\Model;
+use MusicPlayer\Library\Playlist;
 use MusicPlayer\Exception\ConfigurationNotFound;
 use MusicPlayer\Exception\DatabaseException;
 use MusicPlayer\Exception\InvalidPasswordException;
@@ -11,7 +12,7 @@ use MusicPlayer\Exception\InvalidPasswordException;
 /**
  * User class
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class User extends Model {
     protected $table = 'users';
@@ -40,6 +41,12 @@ class User extends Model {
     protected $password;
 
     /**
+     * User Settings JSON
+     * @var string
+     */
+    protected $settings = '{}';
+
+    /**
      * User constructor
      *
      * @param array|int User Id array or id number
@@ -55,16 +62,8 @@ class User extends Model {
             $this->id = $user['userID'];
             $this->username = $user['username'];
             $this->password = $user['password'];
+            $this->settings = $user['settings'];
         }
-    }
-
-    /**
-     * Load user from database
-     */
-    protected function load($id) {
-        $user = $this->select(['*'], ['userID' => $id]);
-
-        return reset($user);
     }
 
     /**
@@ -157,10 +156,21 @@ class User extends Model {
      */
     public function save() {
         if ($this->id) {
-            $this->update($this->id, ['username' => $this->username, 'password' => $this->password]);
+            $this->update(
+                $this->id,
+                [
+                    'username' => $this->username,
+                    'password' => $this->password,
+                    'settings' => $this->settings
+                ]
+            );
 
         } else {
-            $this->id = $this->insert(['username' => $this->username, 'password' => $this->password]);
+            $this->id = $this->insert([
+                'username' => $this->username,
+                'password' => $this->password,
+                'settings' => $this->settings
+            ]);
         }
 
         return $this;
@@ -184,5 +194,34 @@ class User extends Model {
         }
 
         $this->delete($this->id);
+    }
+
+    /**
+     * Get settings
+     *
+     * @return string
+     */
+    public function settings() {
+        return json_decode($settings);
+    }
+
+    /**
+     * Set settings
+     *
+     * @param string|array|object $settings
+     * @return $this
+     */
+    public function set_settings($settings) {
+        if (!is_string($settings)) {
+            $settings = json_encode($settings);
+        }
+
+        $this->settings = $settings;
+
+        return $this;
+    }
+
+    public function playlists() {
+        return (new Playlist)->user_playlists($this->id);
     }
 }

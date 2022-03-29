@@ -10,13 +10,14 @@ use MusicPlayer\Message\Errors;
 use MusicPlayer\Message\Success;
 use MusicPlayer\Twig;
 use MusicPlayer\User\Auth;
+use MusicPlayer\User\User;
 use MusicPlayer\User\Users;
 
 /**
  * Main controller
  * Frameworkess MVC is ok...
  * 
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class Main extends Controller {
     /** @var Twig $twig */
@@ -32,9 +33,12 @@ class Main extends Controller {
     }
 
     public function index() {
+        $user = new User(Auth::get_authenticated_user()['id']);
+
         $variables = [
             'title' => 'Music Player',
-            'files' => $this->get_library()->files()
+            'files' => $this->get_library()->files(),
+            'playlists' => $user->playlists()
         ];
 
         $this->view('index.html.twig', $variables);
@@ -42,11 +46,13 @@ class Main extends Controller {
 
     public function settings() {
         $users = new Users();
+        $user = new User(Auth::get_authenticated_user()['id']);
 
         $variables = [
             'title' => 'Settings',
             'directories' => $this->get_library()->directories(),
-            'users' => $users->getAll()
+            'users' => $users->getAll(),
+            'playlists' => $user->playlists()
         ];
 
         $this->view('settings.html.twig', $variables);

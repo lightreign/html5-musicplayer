@@ -7,7 +7,7 @@ use Exception;
 /**
  * Authentication failed
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class AuthenticationFailed extends Exception {
     public function __construct($username) {

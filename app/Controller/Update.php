@@ -4,16 +4,19 @@ namespace MusicPlayer\Controller;
 
 use Exception;
 use MusicPlayer\Exception\FileNotFoundException;
-use MusicPlayer\Exception\FilePermssionException;
+use MusicPlayer\Exception\FilePermissionException;
 use MusicPlayer\Library\File;
 use MusicPlayer\Library\Library;
+use MusicPlayer\Library\Playlist;
+use MusicPlayer\Library\Playlist\Item;
+use MusicPlayer\User\Auth;
 use MusicPlayer\User\User;
 use MusicPlayer\User\Users;
 
 /**
  * Update controller
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class Update extends Controller {
 
@@ -26,7 +29,7 @@ class Update extends Controller {
         // Set default response
         $this->response = (object) [
             "message" =>  null,
-            "status" =>  "Error",
+            "status" =>  "Route not found",
         ];
 
         $this->library = new Library();
@@ -129,6 +132,143 @@ class Update extends Controller {
             $this->response->username = $user->username();
             $this->response->status = "Success";
             $this->response->message = "User removed";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    public function update_settings() {
+        $user_id = $this->request->user;
+        $settings = $this->request->settings;
+
+        try {
+            $user = new User($user_id);
+            $user->update_settings($settings)
+                ->save();
+
+            $this->response->user_id = $user_id;
+            $this->response->status = "Success";
+            $this->response->message = "Settings updated";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+
+    }
+
+    /**
+     * List playlists
+     */
+    public function playlists() {
+        try {
+            $current_user = Auth::get_authenticated_user();
+            $user = new User($current_user['id']);
+
+            $this->response->playlists = $user->playlists();
+            $this->response->status = "Success";
+            $this->response->message = "";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * get playlist items
+     */
+    public function playlist() {
+        try {
+            $current_user = Auth::get_authenticated_user();
+            $user = new User($current_user['id']);
+            $playlist = new Playlist($this->request->playlist);
+
+            $this->response->files = $playlist->items();
+            $this->response->status = "Success";
+            $this->response->message = "";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * Add to a playlist
+     */
+    public function add_to_playlist() {
+        $playlist_id = $this->request->add_to_playlist;
+        $filepath = $this->request->filepath;
+
+        try {
+            $playlist_item = new Item();
+            $playlist_item->set_playlist_id($playlist_id)
+                ->set_filepath($filepath)
+                ->save();
+
+            $this->response->itemid = $playlist_item->id();
+            $this->response->playlistid = $playlist_item->playlist_id();
+            $this->response->filepath = $playlist_item->filepath();
+            $this->response->status = "Success";
+            $this->response->message = "Item added to playlist";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * Add a playlist
+     */
+    public function add_playlist() {
+        $name = $this->request->add_playlist;
+        $description = $this->request->description;
+
+        try {
+            $playlist = new Playlist();
+            $playlist->set_name($name)
+                ->set_description($description)
+                ->set_user_id(Auth::get_authenticated_user()['id'])
+                ->save();
+
+            $this->response->id = $playlist->id();
+            $this->response->name = $playlist->name();
+            $this->response->description = $playlist->description();
+            $this->response->user_id = $playlist->user_id();
+            $this->response->status = "Success";
+            $this->response->message = "Playlist {$playlist->name()} created";
+
+        } catch (Exception $e) {
+            $this->response->status = "Error";
+            $this->response->message = $e->getMessage();
+        }
+    }
+
+    /**
+     * Remove a playlist
+     */
+    public function remove_playlist() {
+        $playlist_id = $this->request->rm_playlist;
+
+        try {
+            $playlist = new Playlist($playlist_id);
+
+            if ($playlist->user_id() !== Auth::get_authenticated_user()['id']) {
+                throw new Exception('Permission Denied');
+            }
+
+            $playlist->remove();
+
+            $this->response->playlistid = $playlist->id();
+            $this->response->name = $playlist->name();
+            $this->response->description = $playlist->description();
+            $this->response->user_id = $playlist->user_id();
+            $this->response->status = "Success";
+            $this->response->message = "Playlist removed";
 
         } catch (Exception $e) {
             $this->response->status = "Error";

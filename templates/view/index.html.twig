@@ -39,10 +39,22 @@
 
                 <div class="pull-right">
                     <label class="btn btn-info" onclick="toggle_unplayable()">{{ button('show-unplayable', use_icons) }}</label>
+                    <label class="btn btn-success" data-toggle="modal" data-target="#playlist-modal">{{ button('playlist', use_icons) }}</label>
                     <a href="/?page=settings" type="button" class="btn btn-warning">{{ button('settings', use_icons) }}</a>
                     {% if auth_enabled %}
                         <a href="/?page=logout" type="button" class="btn btn-danger">{{ button('logout', use_icons) }}</a>
                     {% endif %}
+                </div>
+
+                <div class="row">
+                    <div class="playlist-select col-xs-6 col-md-3 pull-right">
+                        <select id="playlists" class="form-control" placeholder="Select playlist">
+                            <option value="">All Music</option>
+                            {% for playlist in playlists %}
+                                <option value="{{ playlist.id }}">{{ playlist.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -59,4 +71,5 @@
             </div>
         </div>
     </div>
+    {% include 'playlist-modal.html.twig' %}
 {% endblock %}

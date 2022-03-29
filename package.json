@@ -24,6 +24,7 @@
   "dependencies": {
     "bootstrap": "^3.4.1",
     "jquery": "^3.5.1",
+    "jquery-contextmenu": "^2.9.2",
     "jquery-ui-dist": "^1.12.1",
     "lodash": "^4.17.21"
   },

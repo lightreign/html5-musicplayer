@@ -10,7 +10,7 @@ use MusicPlayer\User\User;
 /**
  * Setup Database
  *
- * @author Adrian Pennington <adrian@penningtonfamily.net>
+ * @author Adrian Pennington <git@penningtonfamily.net>
  */
 class Setup {
     use Database;
@@ -47,9 +47,10 @@ class Setup {
      */
     protected function setup_schema() {
         $this->db->exec('CREATE TABLE library (libraryID INTEGER PRIMARY KEY, directory TEXT UNIQUE)');
-        $this->db->exec('CREATE TABLE playlist (playlistID INTEGER PRIMARY KEY, playlist TEXT)');
-        $this->db->exec('CREATE TABLE playlistItems (itemID INTEGER PRIMARY KEY, playlistID INT, item TEXT)');
-        $this->db->exec('CREATE TABLE users (userID INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)');
+        $this->db->exec('CREATE TABLE playlist (playlistID INTEGER PRIMARY KEY, name TEXT, description TEXT, userID INTEGER)');
+        $this->db->exec('CREATE TABLE playlistItems (itemID INTEGER PRIMARY KEY, playlistID INT REFERENCES playlist(playlistID) ON DELETE CASCADE, filepath TEXT)');
+        $this->db->exec('CREATE TABLE users (userID INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT, settings TEXT)');
+        $this->db->exec('CREATE UNIQUE INDEX playlistItems_uniq ON playlistItems(filepath)');
     }
 
     /**

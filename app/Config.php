@@ -12,7 +12,7 @@ use Noodlehaus\Parser\Yaml;
 /**
  * Wrapper Config class
  * 
- * @author  Adrian Pennington <adrian@penningtonfamily.net>
+ * @author  Adrian Pennington <git@penningtonfamily.net>
  */
 class Config extends Singleton {
     protected $config;

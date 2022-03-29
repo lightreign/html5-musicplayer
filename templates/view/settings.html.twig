@@ -12,17 +12,17 @@
 
             <legend>Library</legend>
 
-            <div class="form-inline add-section">
+            <form class="form-inline add-section" id="library-form">
                 <div class="form-group">
                     <label class="sr-only" for="dirpath">Add Directory</label>
                     <input class="form-control directory-entry" type="text" id="dirpath" placeholder="Enter Directory Path"/> 
                 </div>
 
-                <button type="button" id="add-library" class="btn btn-primary">
+                <button type="submit" id="add-library" class="btn btn-primary" disabled>
                     <span class="glyphicon glyphicon-plus"></span>
                     {{ button('add-directory', use_icons) }}
                 </button>
-            </div>
+            </form>
 
             <table class="table library-table">
                 <thead>
@@ -45,7 +45,7 @@
 
             <legend>Users</legend>
 
-            <div class="form-inline add-section add-user-section">
+            <form class="form-inline add-section add-user-section" id="user-form">
                 <div class="form-group">
                     <label class="sr-only" for="username">Username</label>
                     <input class="form-control" type="text" id="username" placeholder="Username"/>
@@ -56,11 +56,11 @@
                     <input class="form-control" type="password" id="password" placeholder="Password"/>
                 </div>
 
-                <button type="button" id="add-user" class="btn btn-success">
+                <button type="submit" id="add-user" class="btn btn-success" disabled>
                     <span class="glyphicon glyphicon-plus"></span>
                     {{ button('add-user', use_icons) }}
                 </button>
-            </div>
+            </form>
 
             <table class='table user-table'>
                 <thead>

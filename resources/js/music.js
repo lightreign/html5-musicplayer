@@ -4,6 +4,7 @@
 */
 
 var audioplayer = document.getElementById('player');
+var playlists;
 
 if (audioplayer) {
     audioplayer.onended = function() {
@@ -31,7 +32,7 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
 (function() {
     if ($('#controls').length) {
-        search();
+        playlists().then(function() { search() });
     }
 
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
@@ -62,7 +63,13 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
     $('#search').on('keyup', _.debounce(search, 500));
 
-    $('#add-library').on('click', function() {
+    $('#dirpath').on('keyup', function() {
+        disable_enable_button_text_length($('#add-library'), $(this));
+    });
+
+    $('#library-form').on('submit', function(e) {
+        e.preventDefault();
+
         if (!$('#dirpath').val()) {
             handle_error("No directory path specified");
             return;
@@ -74,20 +81,19 @@ navigator.mediaSession.setActionHandler('pause', function() {
             data: "add_directory=" + $('#dirpath').val(),
             dataType: 'json',
             success: function(json) {
-                if (json["status"] == "Error") {
-                    handle_error(json["message"]);
+                if (json.status == "Error") {
+                    handle_error(json.message);
 
-                } else if (json["status"] == "Success") {
+                } else if (json.status == "Success") {
                     handle_success('Directory added successfully');
 
-                    $('.library-table').append("<tr id='lib" + json['message'] +"'>" + 
+                    $('.library-table').append("<tr id='lib" + json.message +"'>" + 
                         "<td>" + $('#dirpath').val() + "</td>" +
-                        "<td><a href='#' class='rmlibrary' libraryID='" + json['message'] +
+                        "<td><a href='#' class='rmlibrary' libraryID='" + json.message +
                         "'><span class='glyphicon glyphicon-remove' title='Delete From Library'></span></a></td>"
                     );
 
                 } else {
-                    
                     handle_error("No Response from Music Server");
                 }
             },
@@ -127,7 +133,17 @@ navigator.mediaSession.setActionHandler('pause', function() {
         });
     });
 
-    $('#add-user').on('click', function() {
+    $('#username').on('keyup', function() {
+        $('#add-user').prop('disabled', !($(this).val().length && $('#password').val().length));
+    });
+
+    $('#password').on('keyup', function() {
+        $('#add-user').prop('disabled', !($(this).val().length && $('#username').val().length));
+    });
+
+    $('#user-form').on('submit', function(e) {
+        e.preventDefault();
+
         var username = $('#username').val();
         var password = $('#password').val();
 
@@ -196,6 +212,85 @@ navigator.mediaSession.setActionHandler('pause', function() {
         });
     });
 
+    $('#playlist-name').on('keyup', function() {
+        disable_enable_button_text_length($('#add-playlist'), $(this));
+    });
+
+    $('#playlist-form').on('submit', function(e) {
+        e.preventDefault();
+
+        var name = $('#playlist-name').val();
+        var description = $('#playlist-description').val();
+
+        if (!name) {
+            handle_error("You must specify a playlist name");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "ajax.php",
+            data: "add_playlist=" + name + '&description=' + description,
+            dataType: 'json',
+            success: function(json) {
+                if (json.status == "Error") {
+                    handle_error(json.message);
+
+                } else if (json.status == "Success") {
+                    handle_modal_success('Playlist created');
+
+                    $(".playlist-table tbody").append('<tr id="playlist' + json.id +'">' +
+                        '<td>' + json.name + '</td>' +
+                        '<td>' + json.description + '</td>' +
+                        '<td><a href="#" class="rmplaylist" playlistId="'+ json.id +'"><span class="glyphicon glyphicon-remove" title="Delete Playlist"></span></a> ' +
+                        '</td></tr>'
+                    );
+
+                    playlists.push(json);
+
+                } else {
+                    handle_modal_error("No Response from Music Server");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            },
+            complete: function() {
+                $('#playlist-name').val('');
+                $('#playlist-description').val('');
+            }
+        });
+    });
+
+    $('.playlist-table tbody').on('click', 'a.rmplaylist', function() {
+        var playlistID = $(this).attr('playlistId');
+
+        $.ajax({
+            type: "POST",
+            url: "ajax.php",
+            data: "rm_playlist=" + playlistID,
+            dataType: 'json',
+            success: function(json) {
+                if (json["status"] == "Error") {
+                    handle_error(json.message);
+
+                } else if (json.status== "Success") {
+                    handle_modal_success('Playlist ' + json.name + ' removed');
+
+                    $("tr#playlist" + playlistID).remove();
+
+                    _.remove(playlists, (playlist) => playlist.id === Number(playlistID));
+
+                } else {
+                    handle_modal_error("No Response from Music Server");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            }
+        });
+    });
+
     $('#playback').slider({
         value: 0,
         orientation: "horizontal",
@@ -222,6 +317,16 @@ navigator.mediaSession.setActionHandler('pause', function() {
 
             update_volume_slider_icon(sliderIcon, audioplayer.volume);
         },
+    });
+
+    $('#playlists').on('change', function() {
+        $(this).find('option:selected').each(function() {
+            open_playlist($(this).val());
+        });
+    });
+
+    $('#playlist-modal').on('show.bs.modal', function (event) {
+        $(this).find('.alert').addClass('hidden');
     });
 })();
 
@@ -286,7 +391,7 @@ function search() {
 
                 $.each(json["files"], function(index, file) {
                     var td = $('<td>').addClass('music-file');
-                    var filenameDisplay = $('<span>');
+                    var filenameDisplay = $('<span>').addClass('filename');
 
                     if (!file.playback_supported) {
                         td.addClass('unsupported');
@@ -308,6 +413,116 @@ function search() {
                 });
             } else {
                 handle_error("No Response from Music Server");
+            }
+        },
+        error: function(x,t,m) {
+            handle_error(m);
+        },
+        complete: function() {
+            create_playlist_contextmenu();
+        }
+    });
+}
+
+function playlists() {
+    return $.ajax({
+        type: "GET",
+        url: "ajax.php",
+        data: "playlists=1",
+        dataType: 'json',
+        success: function(response) {
+            playlists = response.playlists;
+        },
+        error: function(x,t,m) {
+            handle_error(m);
+        }
+    });
+}
+
+function create_playlist_contextmenu() {
+    $.contextMenu({
+        selector: '.music-file:not(.unsupported)',
+        build: function($trigger, e) {
+            var items = {};
+
+            playlists.forEach(function(playlist) {
+                items[playlist.id] = {
+                    name: 'Add to ' + playlist.name, callback: (key, opt) => add_to_playlist(key, opt.$trigger)
+                };
+            });
+
+            if (_.isEmpty(items)) {
+                items.new = {
+                    name: 'Create new playlist', callback: () => $('#playlist-modal').modal('show')
+                };
+            }
+
+            return {
+                items: items
+            };
+        }
+    });
+}
+
+function open_playlist(id) {
+    if (id === '') {
+        search();
+        return;
+    }
+
+    $.ajax({
+        type: "GET",
+        url: "ajax.php",
+        data: "playlist=" + id,
+        dataType: 'json',
+        success: function(response) {
+            if (response.status == "Error") {
+                handle_error(response.message);
+
+            } else if (response.status == "Success") {
+                var tbody = $('.playlist').find('table>tbody');
+                tbody.empty();
+
+                $.each(response.files, function(index, file) {
+                    var td = $('<td>').addClass('music-file');
+                    var filenameDisplay = $('<span>');
+
+                    tbody.append(
+                        $('<tr>').append(
+                            td.append(
+                                filenameDisplay.text(file.filename)
+                            ).append(
+                                $('<span>')
+                                    .addClass('file-path')
+                                    .addClass('hidden')
+                                    .text(file.filepath)
+                            )
+                        )
+                    );
+                });
+            } else {
+                handle_error("No Response from Music Server");
+            }
+        },
+        error: function(x,t,m) {
+            handle_error(m);
+        }
+    });
+}
+
+function add_to_playlist(id, element) {
+    var filepath = $(element).find('span.file-path').text();
+
+    return $.ajax({
+        type: "POST",
+        url: "ajax.php",
+        data: "add_to_playlist=" + id + '&filepath=' + filepath,
+        dataType: 'json',
+        success: function(response) {
+            if (response.status == "Error") {
+                handle_error('Unable to add song to playlist, might already exist');
+            } else {
+                handle_success('Song added to playlist');
             }
         },
         error: function(x,t,m) {
@@ -338,7 +553,7 @@ function play_music(object) {
                 $('audio#player').attr('src', json["file"]).attr('autoplay',true);
                 navigator.mediaSession.playbackState = "playing";
 
-                $('title').text(object.find('> span').text());
+                $('title').text(object.find('> span.filename').text());
                 $('#playback').show();
 
             } else {
@@ -433,11 +648,26 @@ function toggle_unplayable() {
 }
 
 function handle_error(error_msg) {
-    $(".error_msg .message").text(error_msg);
-    $(".error_msg").removeClass('hidden');
+    $("#alert-box .error_msg .message").text(error_msg);
+    $("#alert-box .error_msg").removeClass('hidden');
 }
 
 function handle_success(success_msg) {
-    $(".success_msg .message").text(success_msg);
-    $(".success_msg").removeClass('hidden');
+    $("#alert-box .success_msg .message").text(success_msg);
+    $("#alert-box .success_msg").removeClass('hidden');
 }
+
+function handle_modal_error(error_msg) {
+    $(".modal .error_msg .message").text(error_msg);
+    $(".modal .error_msg").removeClass('hidden');
+}
+
+function handle_modal_success(success_msg) {
+    $(".modal .success_msg .message").text(success_msg);
+    $(".modal .success_msg").removeClass('hidden');
+}
+
+function disable_enable_button_text_length(btn, input) {
+    btn.prop('disabled', !(input.val().length));
+}
+
