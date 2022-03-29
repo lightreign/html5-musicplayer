@@ -86,8 +86,13 @@ final class Auth {
     }
 
     public static function get_authenticated_user() {
+        if (Config::get('auth') === false) {
+            $_SESSION['user'] = [ 'id' => 1, 'username' => 'music' ];
+            $_SESSION['accept'] = 1;
+        }
+
         if (empty($_SESSION['user'])) {
-            throw AuthenticationFailed('no user set');
+            throw new AuthenticationFailed('no user set');
         }
 
         return $_SESSION['user'];
