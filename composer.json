@@ -2,7 +2,7 @@
     "name": "lightreign/html5-musicplayer",
     "description": "Play your local music collection in the browser",
     "type": "project",
-    "license": "BSD",
+    "license": "MIT",
     "authors": [
         {
             "name": "Adrian Pennington",
