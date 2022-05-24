@@ -198,7 +198,7 @@ class Playlist extends Model implements JsonSerializable {
     /**
      * Serialised version of object containing important bits
      */
-    public function jsonSerialize() {
+    public function jsonSerialize() : mixed {
         return [
             'id' => $this->id(),
             'name' => $this->name(),

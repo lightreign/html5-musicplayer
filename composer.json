@@ -15,9 +15,9 @@
         }
     },
     "require": {
-        "php": "^7.1|^8.0",
+        "php": "^7.4|^8.1",
         "twig/twig": "^3.0",
-        "hassankhan/config": "^2.1",
+        "hassankhan/config": "^3.0",
         "symfony/yaml": "^4.4.0"
     },
     "require-dev": {

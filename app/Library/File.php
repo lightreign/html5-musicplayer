@@ -74,7 +74,7 @@ class File implements JsonSerializable {
     /**
      * Serialised version of object containing important bits
      */
-    public function jsonSerialize() {
+    public function jsonSerialize() : mixed {
         return [
             'filename' => $this->get_filename(),
             'filepath' => $this->get_file_with_path(),
