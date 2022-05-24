@@ -93,7 +93,11 @@ class Main extends Controller {
             }
         }
 
-        $this->view('login.html.twig');
+        $variables = [
+            'title' => 'Login',
+        ];
+
+        $this->view('login.html.twig', $variables);
     }
 
     public function logout() {

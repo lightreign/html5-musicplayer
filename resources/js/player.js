@@ -4,7 +4,9 @@
 */
 
 var audioplayer = document.getElementById('player');
-var playlists, playlist;
+var playlists;
+var orig_playinglist;
+var shuffle = false;
 
 if (audioplayer) {
     audioplayer.onended = function() {
@@ -53,6 +55,13 @@ navigator.mediaSession.setActionHandler('pause', function() {
         } else {
            pause();
         }
+    });
+
+    $('#shuffle').on('click', function() {
+        shuffle = !shuffle;
+
+        $(this).toggleClass('active', shuffle);
+        toggle_shuffle_playinglist(shuffle);
     });
 
     $('#search').on('keyup', _.debounce(search, 500));
@@ -419,6 +428,18 @@ function update_volume_slider_icon(icon, volume) {
 
 function toggle_unplayable() {
     $('.playlist .unsupported').toggleClass('hidden');
+}
+
+function toggle_shuffle_playinglist(shuffle) {
+    if (!shuffle) {
+        $('.playlist table tbody').empty().append(orig_playinglist);
+    } else {
+        orig_playinglist = $('.playlist table tbody tr').detach();
+        const playinglist = Object.assign(orig_playinglist);
+
+        $(_.shuffle($.makeArray(playinglist))).appendTo($('.playlist table tbody'));
+    }
+
 }
 
 

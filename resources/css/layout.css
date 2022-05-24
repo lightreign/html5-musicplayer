@@ -193,3 +193,7 @@ i.slider-icon {
     margin-top: 25px;
 }
 
+.shuffle-btn {
+    cursor: pointer;
+}
+

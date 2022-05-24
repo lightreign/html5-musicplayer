@@ -127,7 +127,7 @@
     });
 
     $('.user-table tbody').on('click', 'a.rmuser', function() {
-        var userID = $(this).attr('userId');
+        var userID = $(this).attr('user-id');
 
         $.ajax({
             type: "POST",
