@@ -51,6 +51,8 @@ class Main extends Controller {
         $variables = [
             'title' => 'Settings',
             'directories' => $this->get_library()->directories(),
+            'settings' => $user->settings(),
+            'userid' => Auth::get_authenticated_user()['id'],
             'users' => $users->getAll(),
             'playlists' => $user->playlists()
         ];

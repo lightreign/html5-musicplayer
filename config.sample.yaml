@@ -26,8 +26,10 @@ auth: remote_only
 # Enable debug messages
 testing: false
 
-# Show icons rather than text on buttons
-show_icons: false
+settings:
+  # Show icons rather than text on buttons
+  show_icons: false
+  notifications: false
 
 # Show volume buttons rather than slider
 volume_buttons: false

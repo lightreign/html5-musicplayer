@@ -26,6 +26,8 @@
             <span class='glyphicon glyphicon-filter'></span>
         {% elseif text == 'playlist' %}
             <span class='glyphicon glyphicon-list-alt'></span>
+        {% elseif text == 'apply-settings' %}
+            <span class='glyphicon glyphicon-ok'></span>
         {% endif %}
     {% else %}
         <span class="label-{{ text }}">{{ text|replace({'-': ' '})|title }}</span>

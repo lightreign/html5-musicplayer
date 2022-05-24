@@ -5,6 +5,7 @@ namespace MusicPlayer;
 use MusicPlayer\Message\Errors;
 use MusicPlayer\Message\Success;
 use MusicPlayer\User\Auth;
+use MusicPlayer\User\User;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -35,13 +36,21 @@ class Twig {
     }
 
     protected function config() {
+        if (Auth::is_auth_enabled()) {
+            $user = new User(Auth::get_authenticated_user()['id']);
+
+            $use_icons = $user->settings()['show_icons'] ?? false;
+        } else {
+            $use_icons = Config::get('settings.show_icons');
+        }
+
         return [
             'base_url' => Config::get('base_url'),
             'theme' => Config::get('theme'),
             'errors' => Errors::get(),
             'success' => Success::get(),
             'auth_enabled' => Auth::is_auth_enabled(),
-            'use_icons' => Config::get('show_icons'),
+            'use_icons' =>  $use_icons,
             'volume_buttons' => Config::get('volume_buttons'),
         ];
     }

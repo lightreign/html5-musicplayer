@@ -59,6 +59,10 @@ try {
         if (isset($_POST['rm_playlist'])) {
             $controller->remove_playlist();
         }
+
+        if (isset($_POST['update_settings'])) {
+            $controller->update_settings();
+        }
     }
 
     print json_encode($controller->response());

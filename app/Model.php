@@ -93,13 +93,13 @@ abstract class Model {
     public function update($id, array $map) {
         $fields = [];
 
-        $query = "UPDATE SET {$this->table} SET ";
+        $query = "UPDATE {$this->table} SET ";
 
         foreach ($map as $field => $value) {
-            $fields[] = ':' . $field . ' = :' . $field;
+            $fields[] = $field . ' = :' . $field;
         }
 
-        $stmt = $this->db->prepare($query . join(',', $fields) . ' where :' . $this->id_field . ' = :id');
+        $stmt = $this->db->prepare($query . join(',', $fields) . ' where ' . $this->id_field . ' = :id');
 
         foreach ($map as $field => $value) {
             $stmt->bindValue(':' . $field, $value);

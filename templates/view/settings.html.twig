@@ -10,9 +10,30 @@
             </div>
             <div class="clearfix"></div>
 
+            <legend>Settings</legend>
+
+            <form class="section settings" id="setting-form">
+                {% for setting, value in settings %}
+                     <div class="checkbox">
+                        <label for="setting_{{ setting }}">
+                            <input type="checkbox" id="setting_{{ setting }}" name="{{ setting }}" {{ value ? 'checked' : '' }}/> 
+                            {{ setting }}
+                        </label>
+                    </div>
+                {% endfor %}
+
+                <input type="hidden" name="update_settings" value="1"/>
+
+                <div>
+                    <button type="submit" id="apply-settings" class="btn btn-primary">
+                        {{ button('apply-settings', use_icons) }}
+                    </button>
+                </div>
+            </form>
+
             <legend>Library</legend>
 
-            <form class="form-inline add-section" id="library-form">
+            <form class="form-inline section" id="library-form">
                 <div class="form-group">
                     <label class="sr-only" for="dirpath">Add Directory</label>
                     <input class="form-control directory-entry" type="text" id="dirpath" placeholder="Enter Directory Path"/> 
@@ -45,7 +66,7 @@
 
             <legend>Users</legend>
 
-            <form class="form-inline add-section add-user-section" id="user-form">
+            <form class="form-inline section add-user-section" id="user-form">
                 <div class="form-group">
                     <label class="sr-only" for="username">Username</label>
                     <input class="form-control" type="text" id="username" placeholder="Username"/>

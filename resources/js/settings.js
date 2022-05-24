@@ -152,4 +152,29 @@
             }
         });
     });
+
+    $('#setting-form').on('submit', function(e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "ajax.php",
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(json) {
+                if (json["status"] == "Error") {
+                    handle_error(json.message);
+
+                } else if (json.status== "Success") {
+                    handle_success('User settings updated successfully, settings will take effect on next reload');
+
+                } else {
+                    handle_error("No Response when updating user");
+                }
+            },
+            error: function(x,t,m) {
+                handle_error(m);
+            }
+        });
+    } );
 })();

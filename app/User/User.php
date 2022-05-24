@@ -199,10 +199,22 @@ class User extends Model {
     /**
      * Get settings
      *
-     * @return string
+     * @return array
      */
     public function settings() {
-        return json_decode($settings);
+
+        $default_settings = Config::get('settings');
+        $user_settings = json_decode($this->settings, true);
+
+        if ($user_settings === null) {
+            return $default_settings;
+        }
+
+        foreach ($default_settings as $setting => $defaultValue) {
+            $user_settings[ $setting ] = $user_settings[ $setting ] ?? false;
+        }
+
+        return $user_settings;
     }
 
     /**

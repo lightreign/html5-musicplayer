@@ -140,15 +140,16 @@ class Update extends Controller {
     }
 
     public function update_settings() {
-        $user_id = $this->request->user;
-        $settings = $this->request->settings;
+        $current_user = Auth::get_authenticated_user();
+        unset($this->request->update_settings);
+
+        $settings = $this->request;
 
         try {
-            $user = new User($user_id);
-            $user->update_settings($settings)
+            $user = new User($current_user['id']);
+            $user->set_settings($settings)
                 ->save();
 
-            $this->response->user_id = $user_id;
             $this->response->status = "Success";
             $this->response->message = "Settings updated";
 
