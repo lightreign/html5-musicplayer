@@ -203,18 +203,14 @@ class User extends Model {
      */
     public function settings() {
 
-        $default_settings = Config::get('settings');
+        $settings = Config::get('settings');
         $user_settings = json_decode($this->settings, true);
 
         if ($user_settings === null) {
-            return $default_settings;
+            return $settings;
         }
 
-        foreach ($default_settings as $setting => $defaultValue) {
-            $user_settings[ $setting ] = $user_settings[ $setting ] ?? false;
-        }
-
-        return $user_settings;
+        return array_replace($settings, $user_settings);
     }
 
     /**
@@ -223,12 +219,23 @@ class User extends Model {
      * @param string|array|object $settings
      * @return $this
      */
-    public function set_settings($settings) {
-        if (!is_string($settings)) {
-            $settings = json_encode($settings);
+    public function set_settings($user_settings) {
+        $settings = Config::get('settings');
+
+        if (is_string($user_settings)) {
+            $user_settings = json_decode($user_settings, true) ?? [];
+        } else {
+            $user_settings = (array)$user_settings;
         }
 
-        $this->settings = $settings;
+        foreach ($settings as $setting => $default_value) {
+            if (!isset($user_settings[$setting])) {
+                $user_settings[$setting] = '';
+            }
+        }
+
+
+        $this->settings = json_encode($user_settings);
 
         return $this;
     }

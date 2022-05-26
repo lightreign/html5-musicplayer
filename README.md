@@ -7,7 +7,7 @@ Despite this, I decided to rewrite the application for a bit of fun anyway, it s
 Dependencies
 ============
 
-* PHP >= 7.1.3
+* PHP >= 7.4, 8.1 recommended
 * PHP SQlite3 extension
 * Composer (getcomposer.org)
 * NodeJS v10.x

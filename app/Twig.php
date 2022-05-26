@@ -36,7 +36,7 @@ class Twig {
     }
 
     protected function config() {
-        if (Auth::is_auth_enabled()) {
+        if (Auth::is_authenticated()) {
             $user = new User(Auth::get_authenticated_user()['id']);
 
             $use_icons = $user->settings()['show_icons'] ?? false;
