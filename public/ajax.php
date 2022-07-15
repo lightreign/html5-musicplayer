@@ -60,6 +60,10 @@ try {
             $controller->remove_playlist();
         }
 
+        if (isset($_GET['settings'])) {
+            $controller->settings();
+        }
+
         if (isset($_POST['update_settings'])) {
             $controller->update_settings();
         }

@@ -139,6 +139,13 @@ class Update extends Controller {
         }
     }
 
+    public function settings() {
+        $current_user = Auth::get_authenticated_user();
+        $user = new User($current_user['id']);
+        
+        $this->response = $user->settings();
+    }
+
     public function update_settings() {
         $current_user = Auth::get_authenticated_user();
         unset($this->request->update_settings);
