@@ -11,7 +11,10 @@ let gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   concat = require('gulp-concat'),
   sourcemaps = require('gulp-sourcemaps'),
-  del = require('del');
+  del = require('del'),
+  noop = require('gulp-noop');
+
+const mode = process.env.MODE;
 
 // Clean
 gulp.task('clean', () => del(['./public/assets/js','./public/assets/css', './public/assets/fonts', './public/assets/themes']));
@@ -63,7 +66,7 @@ gulp.task('scripts', function() {
     .pipe(sourcemaps.init())
     .pipe(concat('bundle.js'))
     .pipe(sourcemaps.write())
-    .pipe(uglify())
+    .pipe( mode === 'dev' ? noop() : uglify())
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('./public/assets/js'))
 });

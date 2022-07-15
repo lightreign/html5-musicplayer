@@ -45,6 +45,14 @@ navigator.mediaSession.setActionHandler('pause', function() {
         $('#play .label-play').hide();
         $('#play .label-pause').show();
         play_music($(this));
+
+        if (notifications) {
+            if (Notification.permission !== "denied") {
+                Notification.requestPermission((userPermission) => {
+                    console.info('Permission Granted');
+                });
+            }
+        }
     });
 
     $('#play').on('click', function() {
@@ -323,6 +331,8 @@ function play_music(object) {
     $('.error_msg, .success_msg').addClass('hidden');
     navigator.mediaSession.playbackState = "playing";
 
+    const filename = object.find('span.filename').text();
+
     $.ajax({
         type: "POST",
         url: "ajax.php",
@@ -338,6 +348,16 @@ function play_music(object) {
 
                 $('title').text(object.find('> span.filename').text());
                 $('#playback').show();
+
+                if (notifications) {
+                    let notify = new Notification(
+                        'Playing',
+                        {
+                            body: filename,
+                            silent: true
+                        }
+                    );
+                }
 
             } else {
                 handle_error("No Response from Music Server");

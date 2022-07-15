@@ -2,11 +2,36 @@
     General JS file
     author:  Adrian Pennington
 */
-(function() {
+let notifications = false;
+
+(async function() {
     $("#js-test").removeClass("glyphicon-remove").addClass("glyphicon-ok");
 
     if ($('#js-test').hasClass('glyphicon-remove')) {
         $('#install').attr('disabled', true);
+    }
+
+    let settingPromise = $.ajax({
+        type: "GET",
+        url: "ajax.php",
+        data: "settings=1",
+        dataType: 'json',
+        success: (data) => {
+            settings = data;
+        },
+        error: () => {
+            handle_error('unable to get user settings');
+        }
+    });
+
+    try {
+        const settings = await settingPromise;
+    } catch (error) {
+        handle_error('unable to get user settings');
+    }
+
+    if (window.Notification && settings.notifications) {
+        notifications = true;
     }
 })();
 
