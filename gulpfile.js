@@ -1,7 +1,8 @@
 /*
-  Project Gulp file
-  Author: Adrian Pennington
+   Project Gulp file
+   Author: Adrian Pennington
 */
+
 
 'use strict';
 
@@ -36,10 +37,10 @@ gulp.task('css', function() {
 });
 
 // Add Fonts
-gulp.task('fonts', function() {
-  return gulp.src(['./node_modules/bootstrap/dist/fonts/*'])
-    .pipe(gulp.dest('./public/assets/fonts'))
-});
+//gulp.task('fonts', function() {
+//  return gulp.src(['./node_modules/bootstrap/dist/fonts/*'])
+//    .pipe(gulp.dest('./public/assets/fonts'))
+//});
 
 // Add themes
 gulp.task('themes', function() {
@@ -72,7 +73,7 @@ gulp.task('scripts', function() {
 });
 
 // Gulp task to minify all files
-gulp.task('default', gulp.series('clean', 'css', 'fonts', 'themes', 'images', 'scripts'));
+gulp.task('default', gulp.series('clean', 'css', 'themes', 'images', 'scripts'));
 
 // Watch time
 gulp.task('watch', function() {
