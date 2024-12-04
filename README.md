@@ -2,7 +2,8 @@ HTML5 MusicPlayer
 =================
 
 I wrote this code a few years ago as a concept, and since then streaming music web/mobile/native clients have really exploded onto the scene.
-Despite this, I decided to rewrite the application for a bit of fun anyway, it sure has been!
+Despite this, I decided to rewrite the application for a bit of fun anyway, it sure has been! Although I think there is not much reason to keep going with it
+given the alternatives out there, archiving this project.
 
 Dependencies
 ============
